@@ -5,8 +5,18 @@ import mercadopago
 import requests
 import datetime
 from urllib.parse import urlencode
+from functools import wraps
 
 main = Blueprint('main', __name__)
+
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'steam64id' not in session:
+            return redirect('/', 302)
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 @main.route('/test')
@@ -96,6 +106,7 @@ def main_page():
     return render_template('main.html', logged=False)
 
 
+@login_required
 @main.route('/cart')
 def cart():
     user = User.query.filter_by(steam64id=session['steam64id']).first()
@@ -110,6 +121,7 @@ def addItem():
     print(id)
 
 
+@login_required
 @main.route('/shop')
 def itens():
     store = Category.query.all()
@@ -123,6 +135,7 @@ def itens():
                            )
 
 
+@login_required
 @main.route('/inventory')
 def inventory():
     inventory = Inventory.query.filter_by(user_id=session['steam64id']).all()
