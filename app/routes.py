@@ -8,6 +8,12 @@ from urllib.parse import urlencode
 
 main = Blueprint('main', __name__)
 
+
+@main.route('/test')
+def test():
+    return "Hello CI/CD!!!"
+
+
 @main.route('/login')
 def login():
     params = {
