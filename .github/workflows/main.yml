@@ -38,5 +38,5 @@ jobs:
         sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_SERVER "mv /home2/hg0x6a20/infectz.0x6a70.com/index.fcgi /home2/hg0x6a20/infectz.0x6a70.com/$NEW_NAME"
         if [ $? -ne 0 ]; then exit 1; fi
         echo "Updating .htaccess to point to $NEW_NAME"
-        sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_SERVER "sed -i 's|RewriteRule ^(.*)$ index.*.fcgi/\$1 [QSA,L]|RewriteRule ^(.*)$ $NEW_NAME/\$1 [QSA,L]|' /home2/hg0x6a20/infectz.0x6a70.com/.htaccess"
+        sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_SERVER "sed -i 's|RewriteRule \^\(\.\*\)\$ index.\*\.fcgi/\$1 \[QSA,L\]|RewriteRule ^(.*)$ $NEW_NAME/\$1 [QSA,L]|' /home2/hg0x6a20/infectz.0x6a70.com/.htaccess"
         if [ $? -ne 0 ]; then exit 1; fi
