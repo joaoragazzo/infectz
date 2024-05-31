@@ -98,7 +98,11 @@ def main_page():
 
 @main.route('/cart')
 def cart():
-    return render_template('logged/cart.html')
+    user = User.query.filter_by(steam64id=session['steam64id']).first()
+    return render_template('logged/cart.html',
+                           user=user,
+                           logged=True,
+                           )
 
 @main.route('/api/addItem')
 def addItem():
@@ -131,10 +135,6 @@ def inventory():
 
 @main.route('/add-test-database')
 def add_itens():
-    user = User(steam64id=76561198118616961, inventory_notifications=2, cart_notifications=1)
-    db.session.add(user)
-    db.session.commit()
-
     guns_category = Category(name="Armas") # ID: 1
     db.session.add(guns_category)
     db.session.commit()
