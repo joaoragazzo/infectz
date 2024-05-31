@@ -11,7 +11,7 @@ main = Blueprint('main', __name__)
 
 @main.route('/test')
 def test():
-    return "Hello CI/CD!!!"
+    return "Hello CI/CD 2!!!"
 
 
 @main.route('/login')
