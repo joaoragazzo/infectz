@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% include 'includes/servername.html' %}</title>
+    {% include 'includes/default_links.html' %}
+</head>
+<body>
+    {% include 'includes/header.html' %}
+
+    <div class="container full justify-content-center text-center slogan big-text emph margin-top-medium">
+        INVENTÁRIO
+    </div>
+
+    <div class="d-flex margin-top-medium">
+        <div class="container scrollable-container">
+            <div class="row justify-content-center">
+                {% for item in inventory %}
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="image-container" >
+                                    <img src="/static/img/itens/mi17.jpg" >
+                                </div>
+
+                                <h5 class="card-title abel text-center margin-top-low">{{ item.item.name }}</h5>
+                                <p class="card-text abel text-center">{{ item.date_bought }}</p>
+                                {% if not item.redeemed %}
+                                    <button class="button-primary abel">Resgatar</button>
+                                {% else %}
+                                    <button class="button-primary-deactivated abel" disabled>Resgatado</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% if loop.index % 6 == 0 %}
+                        </div><div class="row justify-content-center">
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+
+    {% include 'includes/logged_scripts.html' %}
+</body>
+</html>

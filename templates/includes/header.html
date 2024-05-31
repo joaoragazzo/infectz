@@ -1,0 +1,111 @@
+    <div class="container text-center header abel d-flex justify-content-center align-items-end position-relative" style="padding-top: 30px; height: 100px;">
+        <div class="row w-100 align-items-center">
+            <div class="col">
+                {% if logged %}
+                    <a href="/shop">Loja</a>
+                {% else %}
+                    <a href="/login">Loja</a>
+                {% endif %}
+            </div>
+            <div class="col">
+                Regras
+            </div>
+            <div class="col big-text align-self-end">
+                <a href="/">InfectZ</a>
+            </div>
+            <div class="col">
+                <a href="https://discord.gg/bioz" target="_blank">
+                    Discord
+                </a>
+            </div>
+            <div class="col">
+                {% if logged %}
+                    <button class="invisible_button" onclick="toggleOverlay()">
+                        <img src="{{ session['avatar'] }}" class="rounded" width="50px">
+                        {% if user.inventory_notifications != 0 or user.shop_notifications != 0 or
+                              user.config_notifications != 0 or user.cart_notifications != 0 %}
+                            <div class="notification notification-medium abel">{{ user.inventory_notifications + user.shop_notifications + user.config_notifications + user.cart_notifications }}</div>
+                        {% endif %}
+                        <div class="overlay">
+                            <div class="row">
+                                <div class="col-10  w-100">
+                                    <div class="row mb-2">
+                                        <div class="col small-text">
+                                            {{ session['steam64id'] }}
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col">
+                                            <img src="{{ session['avatar'] }}" class="rounded" width="75px">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col">
+                                            Olá, {{ session['name'] }}!
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col">
+                                            <hr>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <a href="/cart">
+                                            <div class="col button-section rounded-top">
+                                                <div class="row">
+                                                    <div class="col-3">
+                                                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA60lEQVR4nO3WsQpBURjA8VsmKwNG5Q1MJoOFlFmKJ7BY5QHkJZTJG9ydYrPZhZXBoAh/XX1ic45z7pH4z1/n11nOdzzvJwPGPFoA1U/AQScg4wS/BwxuNHQ8lwEVgaeu4SiwB85AwjXuy60bruEm4TR6BadDglcqt56HAPdV4F4IcE0FzltGL0BSBY4AG4vw7CX6hA8twl0duG4RLujAMVkYpu2DF1EZFnxiAfa1UIHbFuDWO3AK2BmgWyCuDQueC9YkcNQAD/LByL6F/m5AGVgHGwYomc4pJwfdW5rOfQVckkOXQNF07p/nqit4etkTHpfOQQAAAABJRU5ErkJggg==">
+                                                        {% if user.cart_notifications != 0 %}
+                                                            <div class="notification notification-small abel">{{ user.cart_notifications }}</div>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="col-9 align-left">Carrinho</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <a href="/inventory">
+                                            <div class="col button-section">
+                                                <div class="row">
+                                                    <div class="col-3">
+                                                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA2klEQVR4nO3TIW4CQRiA0cGgEZWL6hlwNUWB4Aq9A7fgCrW9QgPoSs4ACGhlPUkFryFFkDZkhu0AC+FLNlkxMy+Z/BPCraqGOvqYb7/Nf/3YaA9Tf1vgCbXcYAtv4k3wkANs4gVrh/WK+zJgAwOslO8Lz7hLRdv4lK/NWY8p8Ez+PlLgWEMUO+sLjGKbQga42DOEx4VD5n3Vh53rqv0MUvMXOj4FXKpwSfAw8m6T3nUoAceGKWnYwqFwbN1/z6ke7FxXLf5uk951SIDf5W+ZAncz40t0ovCtq+sbZBDcyD3GSfcAAAAASUVORK5CYII=">
+                                                        {% if user.inventory_notifications != 0 %}
+                                                            <div class="notification notification-small abel">{{ user.inventory_notifications }}</div>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="col-9 align-left">Inventário</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <a href="#">
+                                            <div class="col button-section">
+                                                <div class="row">
+                                                    <div class="col-3"><img width="30" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAC20lEQVR4nO2av2sUQRTHN+QwaLwTwWjhD4QENBExRtGIpdhor5YG/QMisYsKElA06F+glZ1BLGwVLDRiEW0tRDGHwsVKiyTeJfeRgRdYxs3u/MrtXswXrrq3b+azO2/m7XsbRRv6DwTcA5b5Vw1gLGoXAVVW14eoHQRUgGYKyCJQioouYJhsHcxzgvuAa0BPht2IAciFDB89wCiwNzTEfuCrTKIGnE+xnTQAuZ1y/Rngu9ipWOsLBdGXELwqBh4AXZrtduCNAcgroKxdu0lugh5fs0DvWkDE9REYkLh4DvzBXPPAE+AwcACYSbF1hwH2ZECsqI6f1BNYMLCbBXa7gJgEbat12QVkC/CJ4ugzsNUaRGCOBVg6IdQATjpBxGBu5U0B3PCCEJASMJ0jxFug0xsktg3nscTmvc8QDeQU+WgZOBQS5IXlBFQaMw4MAt3yO6rWuvxno0ehIHbKrmGqp3r6ofkrA1MW/n4Bm13fJ1TKcVXyqfeWEB0GY3RYwrwG7sshfSLtRinndyUNcFUtdYDkGzbnMd43Neckx0v4adwUIjbmTc8xl5Kcpr2emuiIA4jaAHzUXAsQ6zxIAr9wIGUHkEoRQQaLsrTqrU7sAiSk9SSn11XxTOpOrdh+twE/HcdalLmOZWW76j38InDHsJiwoimLA/GZhd+XwIQqIwH9TgU+hxRFwVQynoQNxG+nFCVQ0jgnh92Q2pblNyQxYbucHgeByDmNb4ZO4wcsl1coLaiaVyiILinE5aUZVYUMAfKQ/DXpC3E2wIkfQk3gnCvEDuAHxVEN2OUConohRdOoa2PHpIhtU4H3KWJX1ZysQQzbCu/EZlhOa9e2Qm9GEbDq3fBZBaYhp3QpodEzbVhM0Bs9nVIu0rPwoF2reOvtC3Dac7ueSLn+eKwLEA5Ca/yockx3ht0VA5BLBi2NEafGTovzsv6o6GK9fDCwbj7hiFUt2/+jmg1F7voLIPGx/CY2I0YAAAAASUVORK5CYII="></div>
+                                                    <div class="col-9 align-left">Configurações</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <a href="/logout">
+                                            <div class="col button-section rounded-bottom">
+                                                <div class="row">
+                                                    <div class="col-3"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAzklEQVR4nO2WsQ0CMQwAUwAlbEDHEvCsQcEEjEHHMwKrpEUMAMzwNAwA33DIKJFSPNFjQoQQV1qOL46SyMYEAD1gDZzQUwGl1DLPcAmpKGMi2Y0wNkqAwncWS3qglbSu8xcJwAIYmQBgn/zogBo4A5Mg1gdsapHnAsyCePdTIuEGLFsvaojveI0N0NGINFhgkEMkHIFhDtEhh8hqjm6b5TLEIOX1/pYHe831Bc2zfKqqOj8pqlxO8YZk6mpEh5OU49YqJpIBUmS+Mw2NA+QdDuYc/Whb5GYAAAAASUVORK5CYII="></div>
+                                                    <div class="col-9 align-left">Logout</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </button>
+                {% else %}
+                    <a href="/login">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>

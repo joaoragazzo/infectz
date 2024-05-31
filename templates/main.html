@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% include 'includes/servername.html' %}</title>
+    {% include 'includes/default_links.html' %}
+</head>
+<body>
+    {% include 'includes/header.html' %}
+
+    <div class="text-center" style="margin-top: 10%;">
+        <div class="slogan container ">
+            <h1><span id="wait-1" class="invisible-text">Imersivo.</span> <span class="invisible-text" id="wait-2">Intenso.</span><br><div class="emph invisible-text" id="wait-3">InfectZ.</div></h1>
+        </div>
+        <p id="wait-4" class="small-intro-text invisible-text abel">
+            InfectZ é um servidor do DayZ focado ao estilo de jogo Vanilla++. <br>
+            Entre no nosso servidor e venha tentar sobreviver com a gente.
+            <br> <br>
+            <a href="https://discord.gg/bioz">
+                <img src="/static/img/icons/discord.svg" width="30">
+            </a>
+        </p>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="/static/js/fade-in.js"></script>
+
+    {% include 'includes/logged_scripts.html' %}
+
+</body>
+</html>
