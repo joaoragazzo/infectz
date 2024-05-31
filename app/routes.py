@@ -19,11 +19,6 @@ def login_required(f):
     return decorated_function
 
 
-@main.route('/test')
-def test():
-    return "Hello CI/CD 2!!!"
-
-
 @main.route('/login')
 def login():
     params = {
@@ -106,8 +101,8 @@ def main_page():
     return render_template('main.html', logged=False)
 
 
-@login_required
 @main.route('/cart')
+@login_required
 def cart():
     user = User.query.filter_by(steam64id=session['steam64id']).first()
     return render_template('logged/cart.html',
@@ -121,8 +116,8 @@ def addItem():
     print(id)
 
 
-@login_required
 @main.route('/shop')
+@login_required
 def itens():
     store = Category.query.all()
     user = User.query.filter_by(steam64id=session['steam64id']).first()
@@ -135,8 +130,8 @@ def itens():
                            )
 
 
-@login_required
 @main.route('/inventory')
+@login_required
 def inventory():
     inventory = Inventory.query.filter_by(user_id=session['steam64id']).all()
     user = User.query.filter_by(steam64id=session['steam64id']).first()
