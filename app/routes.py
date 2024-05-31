@@ -126,8 +126,9 @@ def itens():
 @main.route('/inventory')
 def inventory():
     inventory = Inventory.query.filter_by(user_id=session['steam64id']).all()
-
+    user = User.query.filter_by(steam64id=session['steam64id']).first()
     return render_template('logged/inventory.html',
+                           user=user,
                            inventory=(inventory if inventory is not None else []),
                            logged=True
                            )
