@@ -1,0 +1,47 @@
+on:
+  push:
+    branches:
+      - master
+name: 🚀 Deploy website on push
+
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v3
+
+    - name: Install sshpass
+      run: sudo apt-get install sshpass
+
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+
+    - name: Generate new index.fcgi name
+      id: generate_name
+      run: echo "filename=index_$(date +%s).fcgi" >> $GITHUB_ENV
+
+    - name: Find and rename index_*.fcgi
+      env:
+        SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+        SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+        SSH_SERVER: ${{ secrets.SSH_SERVER }}
+        NEW_NAME: ${{ env.filename }}
+      run: |
+        echo "Finding the current index_*.fcgi file"
+        CURRENT_NAME=$(sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_SERVER "ls /home2/hg0x6a20/infectz.0x6a70.com/index_*.fcgi | head -n 1")
+        echo "Found current index file: $CURRENT_NAME"
+        echo "Renaming $CURRENT_NAME to $NEW_NAME on server"
+        sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_SERVER "mv $CURRENT_NAME /home2/hg0x6a20/infectz.0x6a70.com/$NEW_NAME"
+        if [ $? -ne 0 ]; then exit 1; fi
+        echo "Updating .htaccess to point to $NEW_NAME"
+        sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_SERVER "sed -i 's|RewriteRule ^(.*)$ index.*.fcgi/\$1 \[QSA,L\]|RewriteRule ^(.*)$ $NEW_NAME/\$1 \[QSA,L\]|' /home2/hg0x6a20/infectz.0x6a70.com/.htaccess"
+        if [ $? -ne 0 ]; then exit 1; fi
+        echo "Verifying .htaccess update"
+        sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_SERVER "grep '$NEW_NAME' /home2/hg0x6a20/infectz.0x6a70.com/.htaccess"
