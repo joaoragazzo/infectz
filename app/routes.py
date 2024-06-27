@@ -1,22 +1,15 @@
 from flask import render_template, request, url_for, redirect, session, Response, Blueprint
 from app.config import Config
 from app.models import db, Item, User, Inventory, Category
+from app.middleware import login_required
 import mercadopago
 import requests
 import datetime
 from urllib.parse import urlencode
-from functools import wraps
+
 
 main = Blueprint('main', __name__)
 
-
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'steam64id' not in session:
-            return redirect('/', 302)
-        return f(*args, **kwargs)
-    return decorated_function
 
 
 @main.route('/login')
@@ -102,11 +95,11 @@ def main_page():
 
 
 @main.route('/cart')
-@login_required
+#@login_required
 def cart():
-    user = User.query.filter_by(steam64id=session['steam64id']).first()
+    #user = User.query.filter_by(steam64id=session['steam64id']).first()
     return render_template('logged/cart.html',
-                           user=user,
+                           # user=user,
                            logged=True,
                            )
 
