@@ -11,7 +11,7 @@ def add_cart_item(item_id: int, user_id: int) -> None:
         raise Exception("This item does not exists in our database.")
 
     try:
-        db.session.add(Cart(item_id, user_id))
+        db.session.add(Cart(item_id=item_id, user_id=user_id))
         db.session.commit()
     except Exception as e:
         raise e
