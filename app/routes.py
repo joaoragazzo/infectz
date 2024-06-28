@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, session, Blueprint, flash
+from flask import render_template, request, redirect, session, Blueprint
 from app.config import Config
 from app.models import db, Item, User, Inventory, Category
 from app.middleware import login_required
@@ -95,7 +95,7 @@ def main_page():
     return render_template('main.html', logged=False)
 
 
-@main.route('/cart', method=['GET'])
+@main.route('/cart')
 @login_required
 def cart():
     user = User.query.filter_by(steam64id=session['steam64id']).first()
