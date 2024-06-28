@@ -43,4 +43,5 @@ class Cart(db.Model):
     user_id = db.Column(db.BigInteger, db.ForeignKey('user.steam64id'), nullable=False)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
 
+
     item = db.relationship('Item', backref='cart_items', lazy=True)
