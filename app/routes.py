@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, session, Blueprint, flash
+from flask import render_template, request, redirect, session, Blueprint, flash, jsonify
 from app.config import Config
 from app.models import db, Item, User, Inventory, Category
 from app.middleware import login_required

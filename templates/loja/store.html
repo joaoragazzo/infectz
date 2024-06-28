@@ -82,7 +82,7 @@
     function addToCart(id) {
         const url = "{{ server_site_url }}/cart"
         const data = {
-            id: id
+            item_id: id
         }
 
         fetch(url, {
