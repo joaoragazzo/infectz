@@ -113,6 +113,7 @@ def cart_add_item():
     item_id = int(request.form.get('item_id'))
     action = request.form.get('action')
 
+
     if action == 'add':
         add_cart_item(item_id, user.steam64id)
         message = "Item adicionado com sucesso!"
