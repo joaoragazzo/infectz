@@ -80,7 +80,7 @@
     }
 
     function addToCart(id) {
-        const url = "{{ server_site_url }}/api/addItem"
+        const url = "{{ server_site_url }}/cart"
         const data = {
             id: id
         }
@@ -93,13 +93,24 @@
             body: JSON.stringify(data),
             credentials: 'same-origin'
         })
-            .then(response => response.json)
-            .then(data => {
-                console.log('Success: ', data)
-            })
-            .catch((error) => {
-                console.log('Failed: ', error)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success: ', data);
+            showFeedback('Item adicionado ao carrinho com sucesso!');
         })
+        .catch((error) => {
+            console.log('Failed: ', error);
+            showFeedback('Falha ao adicionar item ao carrinho.');
+        });
+    }
+
+    function showFeedback(message) {
+        const feedback = document.getElementById('feedback');
+        feedback.innerText = message;
+        feedback.style.display = 'block';
+        setTimeout(() => {
+            feedback.style.display = 'none';
+        }, 3000);
     }
 
 </script>
