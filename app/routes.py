@@ -1,9 +1,9 @@
-from flask import render_template, request, redirect, session, Blueprint, flash, jsonify
+from flask import render_template, request, redirect, session, Blueprint, flash
 from app.config import Config
 from app.models import db, Item, User, Inventory, Category
 from app.middleware import login_required
-from app.services.cart import add_cart_item, remove_cart_item
-import mercadopago
+# from app.services.cart import add_cart_item, remove_cart_item
+# import mercadopago
 import requests
 import datetime
 from urllib.parse import urlencode
@@ -105,28 +105,28 @@ def cart():
                            )
 
 
-@main.route('/cart', methods=['POST'])
-@login_required
-def cart_add_item():
-    user = User.query.filter_by(steam64id=session['steam64id']).first()
-
-    item_id = int(request.form.get('item_id'))
-    action = request.form.get('action')
-
-
-    if action == 'add':
-        add_cart_item(item_id, user.steam64id)
-        message = "Item adicionado com sucesso!"
-        status = "success"
-    elif action == 'remove':
-        remove_cart_item(item_id, user.steam64id)
-        message = "Item removido com sucesso!"
-        status = "success"
-    else:
-        message = "Ação ou item desconhecidos!"
-        status = "error"
-
-    return jsonify({'status': status, 'message': message})
+# @main.route('/cart', methods=['POST'])
+# @login_required
+# def cart_add_item():
+#     user = User.query.filter_by(steam64id=session['steam64id']).first()
+#
+#     item_id = int(request.form.get('item_id'))
+#     action = request.form.get('action')
+#
+#
+#     if action == 'add':
+#         add_cart_item(item_id, user.steam64id)
+#         message = "Item adicionado com sucesso!"
+#         status = "success"
+#     elif action == 'remove':
+#         remove_cart_item(item_id, user.steam64id)
+#         message = "Item removido com sucesso!"
+#         status = "success"
+#     else:
+#         message = "Ação ou item desconhecidos!"
+#         status = "error"
+#
+#     return jsonify({'status': status, 'message': message})
 
 
 @main.route('/shop')
