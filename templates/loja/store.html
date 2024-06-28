@@ -79,34 +79,31 @@
         }
     }
 
-    function addToCart(id) {
-        const url = "{{ server_site_url }}/cart"
-        const data = {
-            item_id: id
-        }
+    function addToCart(item_id) {
+        const url = "{{ url_for('main.cart_add_item') }}";
+        const data = new FormData();
+        data.append('item_id', item_id);
+        data.append('action', 'add');
 
         fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data),
+            body: data,
             credentials: 'same-origin'
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Success: ', data);
-            showFeedback('Item adicionado ao carrinho com sucesso!');
+            showFeedback(data.message, data.status);
         })
         .catch((error) => {
             console.log('Failed: ', error);
-            showFeedback('Falha ao adicionar item ao carrinho.');
+            showFeedback('Falha ao adicionar item ao carrinho.', 'error');
         });
     }
 
-    function showFeedback(message) {
+    function showFeedback(message, status) {
         const feedback = document.getElementById('feedback');
         feedback.innerText = message;
+        feedback.className = 'feedback ' + status; // Adiciona a classe de status para estilo
         feedback.style.display = 'block';
         setTimeout(() => {
             feedback.style.display = 'none';
