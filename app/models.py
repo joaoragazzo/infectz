@@ -38,10 +38,10 @@ class User(db.Model):
     cart = db.relationship('Cart', backref='user', lazy=True)
 
 
-# class Cart(db.Model):
-#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-#     user_id = db.Column(db.BigInteger, db.ForeignKey('user.steam64id'), nullable=False)
-#     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
-#
-#
-#     item = db.relationship('Item', backref='cart_items', lazy=True)
+class Cart(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.BigInteger, db.ForeignKey('user.steam64id'), nullable=False)
+    item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
+
+
+    item = db.relationship('Item', backref='cart_items', lazy=True)
