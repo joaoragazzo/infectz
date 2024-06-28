@@ -95,11 +95,11 @@ def main_page():
 
 
 @main.route('/cart')
-#@login_required
+@login_required
 def cart():
-    #user = User.query.filter_by(steam64id=session['steam64id']).first()
+    user = User.query.filter_by(steam64id=session['steam64id']).first()
     return render_template('logged/cart.html',
-                           # user=user,
+                           user=user,
                            logged=True,
                            )
 
