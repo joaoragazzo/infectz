@@ -95,7 +95,7 @@ def main_page():
     return render_template('main.html', logged=False)
 
 
-@main.route('/cart')
+@main.route('/cart', method=['GET'])
 @login_required
 def cart():
     user = User.query.filter_by(steam64id=session['steam64id']).first()
