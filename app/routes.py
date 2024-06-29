@@ -9,9 +9,7 @@ import requests
 import datetime
 from urllib.parse import urlencode
 
-
 main = Blueprint('main', __name__)
-
 
 
 @main.route('/login')
@@ -98,11 +96,13 @@ def main_page():
 @main.route('/cart', methods=['GET'])
 @login_required
 def cart():
+    # TODO: refact this poorly code
     user: User = User.query.filter_by(steam64id=session['steam64id']).first()
     empty_cart_notification(user.steam64id)
 
     cart_items: list[Item] = Cart.query.filter_by(user_id=user.steam64id).all()
     cart_items_final: list[dict] = []
+    already_in_cart: list[str] = []
 
     for cart_item in cart_items:
         count = 0
@@ -110,17 +110,17 @@ def cart():
             if ci.item.name == cart_item.item.name:
                 count += 1
 
-        cart_items_final.append(
-            {
-                'name': cart_item.item.name,
-                'count': count,
-                'price': cart_item.item.price,
-                'image': cart_item.item.image_url
-            }
-        )
+        if cart_item.item.name not in already_in_cart:
+            cart_items_final.append(
+                {
+                    'name': cart_item.item.name,
+                    'count': count,
+                    'price': cart_item.item.price,
+                    'image': cart_item.item.image_url
+                }
+            )
 
-
-
+            already_in_cart.append(cart_item.item.name)
 
     return render_template('logged/cart.html',
                            user=user,
@@ -182,15 +182,15 @@ def inventory():
 
 @main.route('/add-test-database')
 def add_itens():
-    guns_category = Category(name="Armas") # ID: 1
+    guns_category = Category(name="Armas")  # ID: 1
     db.session.add(guns_category)
     db.session.commit()
 
-    vehicles_category = Category(name="Veículos") # ID: 2
+    vehicles_category = Category(name="Veículos")  # ID: 2
     db.session.add(vehicles_category)
     db.session.commit()
 
-    bases_category = Category(name="Bases") # ID: 3
+    bases_category = Category(name="Bases")  # ID: 3
     db.session.add(bases_category)
     db.session.commit()
 
@@ -280,5 +280,3 @@ def pagar():
     #                        base64qrcode=payment_response['response']['point_of_interaction']['transaction_data'][
     #                            'qr_code_base64']
     #                        )
-
-
