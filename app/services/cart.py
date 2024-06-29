@@ -28,3 +28,4 @@ def remove_cart_item(user_id: int, item_id: int) -> None:
         db.session.commit()
     except Exception as e:
         raise e
+

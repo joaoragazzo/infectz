@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, session, Blueprint, flash, jsonify
 from app.config import Config
-from app.models import db, Item, User, Inventory, Category
+from app.models import db, Item, User, Inventory, Category, Cart
 from app.middleware import login_required
 from app.services.cart import add_cart_item, remove_cart_item
 from app.services.notifications import add_cart_notification, remove_cart_notification, empty_cart_notification
@@ -100,9 +100,32 @@ def main_page():
 def cart():
     user: User = User.query.filter_by(steam64id=session['steam64id']).first()
     empty_cart_notification(user.steam64id)
+
+    cart_items: list[Item] = Cart.query.filter_by(user=user.steam64id).all()
+    cart_items_final: list[dict] = []
+
+    for cart_item in cart_items:
+        count = 0
+        for ci in cart_items:
+            if ci.name == cart_item.name:
+                count += 1
+
+        cart_items_final.append(
+            {
+                'name': cart_item.name,
+                'count': count,
+                'price': cart_item.price,
+                'image': cart_item.image
+            }
+        )
+
+
+
+
     return render_template('logged/cart.html',
                            user=user,
                            logged=True,
+                           cart_items=cart_items_final
                            )
 
 

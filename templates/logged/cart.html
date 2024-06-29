@@ -17,15 +17,16 @@
     <div class="container d-flex justify-content-center align-items-end position-relative margin-top-low">
         <div class="cart text-center">
             <div class="cart-content scrollable-container">
+                {% for cart_item in cart_items %}
                 <div class="cart-item row p-10">
                     <div class="col-auto p-0 small-icon">
                         <div class="image-container">
-                            <img src="/static/img/itens/mi17.jpg">
+                            <img src="{{ cart_item["image"] }}">
                         </div>
                     </div>
                     <div class="col-6 text-left flex-grow-1">
-                        <div class="medium-text abel"><b>MI17</b></div>
-                        <div class="small-text abel">R$ 75.00</div>
+                        <div class="medium-text abel"><b>{{ cart_item["name"] }}</b></div>
+                        <div class="small-text abel">R$ {{ cart_item["price"] }}</div>
                     </div>
                     <div class="col-2 flex-grow-1 center">
                         <div class="row flex-grow-1 abel">
@@ -36,7 +37,7 @@
                             </div>
                             <div class="col">
                                 <div>
-                                    1
+                                    {{ cart_item["count"] }}
                                 </div>
                             </div>
                             <div class="col padding-left-none">
@@ -47,6 +48,7 @@
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
 
 
