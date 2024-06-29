@@ -107,7 +107,7 @@ def cart():
     for cart_item in cart_items:
         count = 0
         for ci in cart_items:
-            if ci.name == cart_item.name:
+            if ci.item.name == cart_item.item.name:
                 count += 1
 
         cart_items_final.append(
