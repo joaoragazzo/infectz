@@ -187,7 +187,7 @@ def add_itens():
     db.session.commit()
 
     mi17 = Item(category_id=2, name="MI17", description="Veiculo que o alemao fica brabo",
-                price=15.0, price_off=0, image_url='/static/img/itens/mi17.png')
+                price=15.0, price_off=0, image_url='/static/img/itens/mi17.jpg')
     db.session.add(mi17)
     db.session.commit()
 
