@@ -101,7 +101,7 @@ def cart():
     user: User = User.query.filter_by(steam64id=session['steam64id']).first()
     empty_cart_notification(user.steam64id)
 
-    cart_items: list[Item] = Cart.query.filter_by(user=user.steam64id).all()
+    cart_items: list[Item] = Cart.query.filter_by(user_id=user.steam64id).all()
     cart_items_final: list[dict] = []
 
     for cart_item in cart_items:
