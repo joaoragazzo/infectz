@@ -3,6 +3,7 @@ from app.config import Config
 from app.models import db, Item, User, Inventory, Category
 from app.middleware import login_required
 from app.services.cart import add_cart_item, remove_cart_item
+from app.services.notifications import add_cart_notification, remove_cart_notification, empty_cart_notification
 import mercadopago
 import requests
 import datetime
@@ -86,7 +87,6 @@ def logout():
 def main_page():
     if session.get('steam64id') is not None:
         user = User.query.filter_by(steam64id=session['steam64id']).first()
-
         return render_template('main.html',
                                logged=True,
                                user=user
@@ -98,7 +98,8 @@ def main_page():
 @main.route('/cart', methods=['GET'])
 @login_required
 def cart():
-    user = User.query.filter_by(steam64id=session['steam64id']).first()
+    user: User = User.query.filter_by(steam64id=session['steam64id']).first()
+    empty_cart_notification(user.steam64id)
     return render_template('logged/cart.html',
                            user=user,
                            logged=True,
@@ -108,23 +109,24 @@ def cart():
 @main.route('/cart', methods=['POST'])
 @login_required
 def cart_add_item():
-    user = User.query.filter_by(steam64id=session['steam64id']).first()
+    user: User = User.query.filter_by(steam64id=session['steam64id']).first()
 
-    item_id = int(request.form.get('item_id'))
-    action = request.form.get('action')
-
+    item_id: int = int(request.form.get('item_id'))
+    action: str = request.form.get('action')
 
     if action == 'add':
-        add_cart_item(item_id, user.steam64id)
-        message = "Item adicionado com sucesso!"
-        status = "success"
+        add_cart_item(user.steam64id, item_id)
+        add_cart_notification(user.steam64id, 1)
+        message: str = "Item adicionado com sucesso!"
+        status: str = "success"
     elif action == 'remove':
-        remove_cart_item(item_id, user.steam64id)
-        message = "Item removido com sucesso!"
-        status = "success"
+        remove_cart_item(user.steam64id, item_id)
+        remove_cart_notification(user.steam64id, 1)
+        message: str = "Item removido com sucesso!"
+        status: str = "success"
     else:
-        message = "Ação ou item desconhecidos!"
-        status = "error"
+        message: str = "Ação ou item desconhecidos!"
+        status: str = "error"
 
     return jsonify({'status': status, 'message': message})
 
@@ -169,19 +171,23 @@ def add_itens():
     db.session.add(bases_category)
     db.session.commit()
 
-    mosin_item = Item(category_id=1, name="Mosin", description="Arma ruim", price=20.0, price_off=0)
+    mosin_item = Item(category_id=1, name="Mosin", description="Arma ruim",
+                      price=20.0, price_off=0, image_url='/static/img/itens/mosin.jpg')
     db.session.add(mosin_item)
     db.session.commit()
 
-    m4a1_item = Item(category_id=1, name="M4A1", description="Arma média", price=25.0, price_off=0)
+    m4a1_item = Item(category_id=1, name="M4A1", description="Arma média",
+                     price=25.0, price_off=0, image_url='/static/img/itens/m4a1.jpg')
     db.session.add(m4a1_item)
     db.session.commit()
 
-    armalite = Item(category_id=1, name="ArmaLite", description="Arma boa", price=99.0, price_off=0)
+    armalite = Item(category_id=1, name="ArmaLite", description="Arma boa",
+                    price=99.0, price_off=0, image_url='/static/img/itens/armalite.jpeg')
     db.session.add(armalite)
     db.session.commit()
 
-    mi17 = Item(category_id=2, name="MI17", description="Veiculo que o alemao fica brabo", price=15.0, price_off=0)
+    mi17 = Item(category_id=2, name="MI17", description="Veiculo que o alemao fica brabo",
+                price=15.0, price_off=0, image_url='/static/img/itens/mi17.png')
     db.session.add(mi17)
     db.session.commit()
 

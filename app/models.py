@@ -8,6 +8,7 @@ class Item(db.Model):
     description = db.Column(db.Text, nullable=False)
     price = db.Column(db.Float, nullable=False)
     price_off = db.Column(db.Float, nullable=True, default=0.0)
+    image_url = db.Column(db.String(255), nullable=True)
 
     category = db.relationship('Category', backref='items', lazy=True)
 
