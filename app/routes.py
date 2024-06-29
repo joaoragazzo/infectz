@@ -112,10 +112,10 @@ def cart():
 
         cart_items_final.append(
             {
-                'name': cart_item.name,
+                'name': cart_item.item.name,
                 'count': count,
-                'price': cart_item.price,
-                'image': cart_item.image
+                'price': cart_item.item.price,
+                'image': cart_item.item.image_url
             }
         )
 
