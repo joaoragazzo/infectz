@@ -18,7 +18,7 @@
         <div class="cart text-center">
             <div class="cart-content scrollable-container">
                 {% for cart_item in cart_items %}
-                <div class="cart-item row p-10">
+                <div id="cart-item-{{ cart_item["id"] }}" class="cart-item row p-10">
                     <div class="col-auto p-0 small-icon">
                         <div class="image-container">
                             <img src="{{ cart_item["image"] }}">
