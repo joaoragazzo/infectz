@@ -93,10 +93,10 @@
                 processData: false,
                 contentType: false,
                 success: function(response) {
-                    showFeedback('Item adicionado ao carrinho com sucesso.', 'success');
+                    showFeedback(response.message, response.status);
                 },
-                error: function() {
-                    showFeedback('Falha ao adicionar item ao carrinho.', 'error');
+                error: function(response) {
+                    showFeedback(response.message, response.status);
                 }
             });
         }

@@ -4,6 +4,7 @@ from app.models import db, Item, User, Inventory, Category, Cart
 from app.middleware import login_required
 from app.services.cart import add_cart_item, remove_cart_item
 from app.services.notifications import add_cart_notification, remove_cart_notification, empty_cart_notification
+from app.exceptions.itemDontExistsException import ItemDontExistsException
 import mercadopago
 import requests
 import datetime
@@ -137,19 +138,23 @@ def cart_add_item():
     item_id: int = int(request.form.get('item_id'))
     action: str = request.form.get('action')
 
-    if action == 'add':
-        add_cart_item(user.steam64id, item_id)
-        add_cart_notification(user.steam64id, 1)
-        message: str = "Item adicionado com sucesso!"
-        status: str = "success"
-    elif action == 'remove':
-        remove_cart_item(user.steam64id, item_id)
-        remove_cart_notification(user.steam64id, 1)
-        message: str = "Item removido com sucesso!"
-        status: str = "success"
-    else:
-        message: str = "Ação ou item desconhecidos!"
-        status: str = "error"
+    status: str = "error"
+    message: str = "Item ou ação desconhecidos!"
+
+    try:
+        if action == 'add':
+            add_cart_item(user.steam64id, item_id)
+            add_cart_notification(user.steam64id, 1)
+            message: str = "Item adicionado com sucesso!"
+            status: str = "success"
+
+        elif action == 'remove':
+            remove_cart_item(user.steam64id, item_id)
+            remove_cart_notification(user.steam64id, 1)
+            message: str = "Item removido com sucesso!"
+            status: str = "success"
+    except ItemDontExistsException:
+        pass
 
     return jsonify({'status': status, 'message': message})
 
