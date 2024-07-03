@@ -17,6 +17,6 @@ def remove_cart_item(user_id: int, item_id: int) -> None:
 
     cart_item_to_remove = Cart.query.filter_by(item_id=item_id, user_id=user_id).first()
 
-    db.session.remove(cart_item_to_remove)
+    db.session.delete(cart_item_to_remove)
     db.session.commit()
 
