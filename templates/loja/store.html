@@ -61,56 +61,65 @@
         </div>
     {%  endfor %}
 </div>
-
+<div id="feedback" class="feedback"></div>
 <script>
-    const categories = [{% for category in store %}"{{ category.name }}",{% endfor %}]
-    for(let i in categories) {
-        document.getElementById(categories[i]).style.display = 'none'
-    }
-    document.getElementById(categories[0]).style.display = 'block'
-
-    function changeCategory(name) {
+    $(document).ready(function() {
+        const categories = [{% for category in store %}"{{ category.name }}",{% endfor %}]
         for(let i in categories) {
-            if (categories[i] === name) {
-                document.getElementById(categories[i]).style.display = 'block'
-            } else {
-                document.getElementById(categories[i]).style.display = 'none'
+            $('#' + categories[i]).hide();
+        }
+        $('#' + categories[0]).show();
+
+        window.changeCategory = function(name) {
+            for(let i in categories) {
+                if (categories[i] === name) {
+                    $('#' + categories[i]).show();
+                } else {
+                    $('#' + categories[i]).hide();
+                }
             }
         }
-    }
 
-    function addToCart(item_id) {
-        const url = "{{ url_for('main.cart_add_item') }}";
-        const data = new FormData();
-        data.append('item_id', item_id);
-        data.append('action', 'add');
+        window.addToCart = function(item_id) {
+            const url = "{{ url_for('main.cart_add_item') }}";
+            const data = new FormData();
+            data.append('item_id', item_id);
+            data.append('action', 'add');
 
-        fetch(url, {
-            method: 'POST',
-            body: data,
-            credentials: 'same-origin'
-        })
-        .then(response => response.json())
-        .then(data => {
-            showFeedback(data.message, data.status);
-        })
-        .catch((error) => {
-            console.log('Failed: ', error);
-            showFeedback('Falha ao adicionar item ao carrinho.', 'error');
-        });
-    }
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    showFeedback('Item adicionado ao carrinho com sucesso.', 'success');
+                },
+                error: function() {
+                    showFeedback('Falha ao adicionar item ao carrinho.', 'error');
+                }
+            });
+        }
 
-    function showFeedback(message, status) {
-        const feedback = document.getElementById('feedback');
-        feedback.innerText = message;
-        feedback.className = 'feedback ' + status; // Adiciona a classe de status para estilo
-        feedback.style.display = 'block';
-        setTimeout(() => {
-            feedback.style.display = 'none';
-        }, 3000);
-    }
-
+        function showFeedback(message, status) {
+            const feedback = $('#feedback');
+            feedback.text(message);
+            feedback.removeClass('error-message success-message warning-message');
+            if (status === 'error') {
+                feedback.addClass('error-message');
+            } else if (status === 'success') {
+                feedback.addClass('success-message');
+            } else if (status === 'warning') {
+                feedback.addClass('warning-message');
+            }
+            feedback.show();
+            setTimeout(() => {
+                feedback.fadeOut();
+            }, 1500);
+        }
+    });
 </script>
+
 
 {% include 'includes/logged_scripts.html' %}
 

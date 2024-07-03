@@ -310,3 +310,77 @@ a {
     text-align: left;
 }
 
+
+.error-message {
+    background-color: #bc0000;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+    font-size: 18px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+    animation: slide-down 0.5s ease-in-out, fade-out 0.5s ease-in-out 4.5s;
+}
+
+.success-message {
+    background-color: #0d823b;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+    font-size: 18px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+    animation: slide-down 0.5s ease-in-out, fade-out 0.5s ease-in-out 4.5s;
+}
+
+.warning-message {
+    background-color: #e6b800;
+    color: black;
+    padding: 20px;
+    border-radius: 10px;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+    font-size: 18px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+    animation: slide-down 0.5s ease-in-out, fade-out 0.5s ease-in-out 1.5s;
+}
+
+@keyframes slide-down {
+    from {
+        transform: translateX(-50%) translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fade-out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
