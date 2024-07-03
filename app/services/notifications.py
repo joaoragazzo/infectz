@@ -1,14 +1,11 @@
 from app.models import User, db
-
-
-def user_exists(steam64id: int) -> bool:
-    user_existence = User.query.filter_by(steam64id=steam64id).first()
-    return user_existence is not None
+from app.exceptions.userDontExitsException import UserDontExistsException
+from app.services.user import  user_exists
 
 
 def add_cart_notification(steam64id: int, amount: int) -> None:
     if not user_exists(steam64id):
-        raise Exception("Steam ID not found")
+        raise UserDontExistsException("Steam ID not found")
 
     user: User = User.query.filter_by(steam64id=steam64id).first()
 
@@ -19,7 +16,7 @@ def add_cart_notification(steam64id: int, amount: int) -> None:
 
 def remove_cart_notification(steam64id: int, amount: int) -> None:
     if not user_exists(steam64id):
-        raise Exception("Steam ID not found")
+        raise UserDontExistsException("Steam ID not found")
 
     user: User = User.query.filter_by(steam64id=steam64id).first()
 
@@ -29,7 +26,7 @@ def remove_cart_notification(steam64id: int, amount: int) -> None:
 
 
 def empty_cart_notification(steam64id: int) -> None:
-    if not user_exists(steam64id):
+    if not UserDontExistsException(steam64id):
         raise Exception("Steam ID not found")
 
     user: User = User.query.filter_by(steam64id=steam64id).first()

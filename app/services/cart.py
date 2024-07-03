@@ -1,10 +1,7 @@
 from app.models import db, Cart, Item
 from app.exceptions.itemDontExistsException import ItemDontExistsException
+from app.services.item import item_exists
 
-
-def item_exists(item_id: int) -> bool:
-    item_existence = Item.query.filter_by(id=item_id).first()
-    return item_existence is not None
 
 
 def add_cart_item(user_id: int, item_id: int) -> None:
