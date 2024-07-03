@@ -5,6 +5,7 @@ from app.middleware import login_required
 from app.services.cart import add_cart_item, remove_cart_item
 from app.services.notifications import add_cart_notification, remove_cart_notification, empty_cart_notification
 from app.exceptions.itemDontExistsException import ItemDontExistsException
+from app.exceptions.cartItemDontExistsException import cartItemDontExistsException
 import mercadopago
 import requests
 import datetime
@@ -154,7 +155,7 @@ def cart_add_item():
             remove_cart_notification(user.steam64id, 1)
             message: str = "Item removido com sucesso!"
             status: str = "success"
-    except ItemDontExistsException:
+    except ItemDontExistsException | cartItemDontExistsException:
         pass
 
     return jsonify({'status': status, 'message': message})
