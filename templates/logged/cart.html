@@ -70,7 +70,7 @@
 
     <script>
         function updateCart(item_id, action) {
-            const url = "{{ url_for('main.cart_add_item') }}";
+            const url = "/cart";
             const data = new FormData();
             data.append('item_id', item_id);
             data.append('action', action);
