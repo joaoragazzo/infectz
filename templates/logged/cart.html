@@ -31,17 +31,17 @@
                     <div class="col-2 flex-grow-1 center">
                         <div class="row flex-grow-1 abel">
                             <div class="col padding-right-none">
-                                <button class="button-small">
+                                <button class="button-small" onclick="updateCart('{{ cart_item['id'] }}','add')">
                                     +
                                 </button>
                             </div>
                             <div class="col">
-                                <div>
+                                <div id="item-count-{{ cart_item['id'] }}">
                                     {{ cart_item["count"] }}
                                 </div>
                             </div>
                             <div class="col padding-left-none">
-                                <button class="button-small">
+                                <button class="button-small" onclick="updateCart('{{ cart_item['id'] }}','remove')">
                                     -
                                 </button>
                             </div>
@@ -69,22 +69,6 @@
     </div>
 
     <script>
-    const categories = [{% for category in store %}"{{ category.name }}",{% endfor %}]
-    for(let i in categories) {
-        document.getElementById(categories[i]).style.display = 'none'
-    }
-    document.getElementById(categories[0]).style.display = 'block'
-
-    function changeCategory(name) {
-        for(let i in categories) {
-            if (categories[i] === name) {
-                document.getElementById(categories[i]).style.display = 'block'
-            } else {
-                document.getElementById(categories[i]).style.display = 'none'
-            }
-        }
-    }
-
     function addToCart(item_id) {
         const url = "{{ url_for('main.cart_add_item') }}";
         const data = new FormData();

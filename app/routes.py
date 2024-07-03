@@ -66,7 +66,7 @@ def authorize():
             session['avatar'] = player_data.get('avatarfull')
             session['steam64id'] = steam_id
 
-            if not User.query.filter_by(steam64id=steam_id).first():
+            if User.query.filter_by(steam64id=steam_id).first() is None:
                 user = User(steam64id=steam_id)
                 db.session.add(user)
                 db.session.commit()
@@ -114,6 +114,7 @@ def cart():
         if cart_item.item.name not in already_in_cart:
             cart_items_final.append(
                 {
+                    'id': cart_item.item.id,
                     'name': cart_item.item.name,
                     'count': count,
                     'price': cart_item.item.price,
@@ -161,7 +162,7 @@ def cart_add_item():
 
 @main.route('/shop')
 @login_required
-def itens():
+def shop():
     store = Category.query.all()
     user = User.query.filter_by(steam64id=session['steam64id']).first()
 

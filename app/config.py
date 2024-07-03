@@ -9,3 +9,7 @@ class Config:
     SERVER_SITE_URL = "https://infectz.0x6a70.com"  # Obs: Não colocar a '/' no final
     SQLALCHEMY_DATABASE_URI = "mysql+pymysql://hg0x6a20_infectz:P8Cx3xbDqLSC0SbJTu@localhost/hg0x6a20_infectz"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_POOL_SIZE = 10
+    SQLALCHEMY_POOL_TIMEOUT = 30
+    SQLALCHEMY_POOL_RECYCLE = 1800
+    SQLALCHEMY_MAX_OVERFLOW = 20
