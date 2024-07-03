@@ -3,7 +3,6 @@ from app.exceptions.itemDontExistsException import ItemDontExistsException
 from app.services.item import item_exists
 
 
-
 def add_cart_item(user_id: int, item_id: int) -> None:
     if not item_exists(item_id):
         raise ItemDontExistsException("This item does not exists in our database.")
@@ -17,12 +16,12 @@ def add_cart_item(user_id: int, item_id: int) -> None:
 
 def remove_cart_item(user_id: int, item_id: int) -> None:
     if not item_exists(item_id):
-        raise Exception("This item does not exists in our database.")
+        raise ItemDontExistsException("This item does not exists in our database.")
 
-    item_to_remove = Item.query.filter_by(item_id=item_id, user_id=user_id).first()
+    cart_item_to_remove = Cart.query.filter_by(item_id=item_id, user_id=user_id).first()
 
     try:
-        db.session.remove(Cart(item_to_remove))
+        db.session.remove(cart_item_to_remove)
         db.session.commit()
     except Exception as e:
         raise e
