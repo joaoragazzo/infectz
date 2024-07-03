@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import event
+from sqlalchemy import event, exc
 from sqlalchemy.pool import Pool
 
 db: SQLAlchemy = SQLAlchemy()
@@ -18,12 +18,18 @@ def create_app():
         cursor.execute("SET SESSION wait_timeout = 28800")
         cursor.close()
 
+
     @event.listens_for(Pool, "checkout")
     def checkout(dbapi_connection, connection_record, connection_proxy):
         try:
+            # Test the connection
             dbapi_connection.cursor().execute("SELECT 1")
-        except Exception as exc:
-            raise exc
+        except dbapi_connection.Error as err:
+            if err.args[0] in (2006, 2013, 2014, 2045, 2055):
+                connection_proxy._pool.dispose()
+                raise exc.DisconnectionError() from err
+            else:
+                raise
 
     from .routes import main as main_blueprint
     app.register_blueprint(main_blueprint)
