@@ -26,8 +26,8 @@ def remove_cart_notification(steam64id: int, amount: int) -> None:
 
 
 def empty_cart_notification(steam64id: int) -> None:
-    if not UserDontExistsException(steam64id):
-        raise Exception("Steam ID not found")
+    if not user_exists(steam64id):
+        raise UserDontExistsException("Steam ID not found")
 
     user: User = User.query.filter_by(steam64id=steam64id).first()
     user.cart_notifications = 0
