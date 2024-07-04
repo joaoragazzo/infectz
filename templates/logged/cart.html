@@ -110,23 +110,6 @@
             });
         }
 
-        function showFeedback(message, status) {
-            const feedback = $('#feedback');
-            feedback.text(message);
-            feedback.removeClass('error-message success-message warning-message');
-            if (status === 'error') {
-                feedback.addClass('error-message');
-            } else if (status === 'success') {
-                feedback.addClass('success-message');
-            } else if (status === 'warning') {
-                feedback.addClass('warning-message');
-            }
-            feedback.show();
-            setTimeout(() => {
-                feedback.fadeOut();
-            }, 3000);
-        }
-
     </script>
 
     {% include 'includes/logged_scripts.html' %}
