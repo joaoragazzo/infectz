@@ -155,7 +155,7 @@ def cart_add_item():
             remove_cart_notification(user.steam64id, 1)
             message: str = "Item removido com sucesso!"
             status: str = "success"
-    except ItemDontExistsException | cartItemDontExistsException:
+    except (ItemDontExistsException, cartItemDontExistsException):
         pass
 
     return jsonify({'status': status, 'message': message})
