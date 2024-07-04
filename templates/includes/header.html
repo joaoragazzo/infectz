@@ -22,10 +22,14 @@
                 {% if logged %}
                     <button class="invisible_button" onclick="toggleOverlay()">
                         <img src="{{ session['avatar'] }}" class="rounded" width="50px">
-                        {% if user.inventory_notifications != 0 or user.shop_notifications != 0 or
-                              user.config_notifications != 0 or user.cart_notifications != 0 %}
-                            <div class="notification notification-medium abel">{{ user.inventory_notifications + user.shop_notifications + user.config_notifications + user.cart_notifications }}</div>
-                        {% endif %}
+
+                        <div id="notification-div">
+                            {% if user.inventory_notifications + user.shop_notifications +
+                              user.config_notifications + user.cart_notifications != 0 %}
+                                <div class="notification notification-medium abel" id="notification">{{ user.inventory_notifications + user.shop_notifications + user.config_notifications + user.cart_notifications }}</div>
+                            {% endif %}
+                        </div>
+
                         <div class="overlay">
                             <div class="row">
                                 <div class="col-10  w-100">
