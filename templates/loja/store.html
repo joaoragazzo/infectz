@@ -61,7 +61,7 @@
         </div>
     {%  endfor %}
 </div>
-<div id="feedback" class="feedback"></div>
+
 <script>
     $(document).ready(function() {
         const categories = [{% for category in store %}"{{ category.name }}",{% endfor %}]
