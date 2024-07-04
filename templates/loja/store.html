@@ -96,13 +96,24 @@
                     const $notification = $('#notification');
                     let $notifications_number;
                     if ($notification.length) {
-                        const content = $notification.text();
+                        let content = $notification.text();
                         $notifications_number = parseInt(content, 10)
                         $notifications_number++
                     } else {
                         $notifications_number = 1
                     }
                     $('#notification-div').html('<div class="notification notification-medium abel" id="notification">' + $notifications_number + '</div>')
+
+                    const $cart_notifications = $('#cart-notifications-div');
+                    if ($cart_notifications.length) {
+                        let content = $cart_notifications.text();
+                        $notifications_number = parseInt(content, 10);
+                        $notifications_number++
+                    } else {
+                        $notifications_number = 1
+                    }
+                    $('#cart-notifications-div').html('<div id="cart-notifications-div" class="notification notification-small abel">' + $notifications_number + '</div>')
+
                     showFeedback(response.message, response.status);
                 },
                 error: function(response) {
