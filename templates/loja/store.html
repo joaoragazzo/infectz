@@ -29,7 +29,7 @@
 
 <div class="d-flex margin-top-medium">
     {% for category in store %}
-        <div id="{{ category.name }}" class="container scrollable-container">
+        <div id="{{ category.name | e }}" class="container scrollable-container">
             <div class="row justify-content-center">
 
                 {% for item in category.items %}
@@ -37,16 +37,16 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="image-container" >
-                                    <img src="{{ item.image_url }}" >
+                                    <img src="{{ item.image_url | e }}" >
                                 </div>
-                                <h5 class="card-title abel text-center margin-top-low margin-bottom-none">{{ item.name }}</h5>
-                                <p class="card-text abel text-center wiped-out margin-bottom-none">{{ item.description }}</p>
+                                <h5 class="card-title abel text-center margin-top-low margin-bottom-none">{{ item.name | e }}</h5>
+                                <p class="card-text abel text-center wiped-out margin-bottom-none">{{ item.description | e }}</p>
                                 <div class="card-text abel text-center price">
                                     <span class="small-padding-top">R$</span>
-                                    <span class="big-text">{{ item.price }}</span>
+                                    <span class="big-text">{{ item.price | e }}</span>
                                     <span class="small-padding-top">00</span>
                                 </div>
-                                <button class="button-primary small-text abel justify-content-center" onclick="addToCart({{ item.id }})">
+                                <button class="button-primary small-text abel justify-content-center" onclick="addToCart({{ item.id | e }})">
                                     <img width="10" src="data:image/svg;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA60lEQVR4nO3WsQpBURjA8VsmKwNG5Q1MJoOFlFmKJ7BY5QHkJZTJG9ydYrPZhZXBoAh/XX1ic45z7pH4z1/n11nOdzzvJwPGPFoA1U/AQScg4wS/BwxuNHQ8lwEVgaeu4SiwB85AwjXuy60bruEm4TR6BadDglcqt56HAPdV4F4IcE0FzltGL0BSBY4AG4vw7CX6hA8twl0duG4RLujAMVkYpu2DF1EZFnxiAfa1UIHbFuDWO3AK2BmgWyCuDQueC9YkcNQAD/LByL6F/m5AGVgHGwYomc4pJwfdW5rOfQVckkOXQNF07p/nqit4etkTHpfOQQAAAABJRU5ErkJggg==">
                                     Adicionar ao carrinho
                                 </button>
@@ -64,7 +64,7 @@
 
 <script>
     $(document).ready(function() {
-        const categories = [{% for category in store %}"{{ category.name }}",{% endfor %}]
+        const categories = [{% for category in store %}"{{ category.name | e}}",{% endfor %}]
         for(let i in categories) {
             $('#' + categories[i]).hide();
         }

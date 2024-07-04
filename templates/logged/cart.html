@@ -18,30 +18,30 @@
         <div class="cart text-center">
             <div class="cart-content scrollable-container">
                 {% for cart_item in cart_items %}
-                <div id="cart-item-{{ cart_item["id"] }}" class="cart-item row p-10">
+                <div id="cart-item-{{ cart_item["id"]|e }}" class="cart-item row p-10">
                     <div class="col-auto p-0 small-icon">
                         <div class="image-container">
-                            <img src="{{ cart_item["image"] }}">
+                            <img src="{{ cart_item["image"]|e }}">
                         </div>
                     </div>
                     <div class="col-6 text-left flex-grow-1">
-                        <div class="medium-text abel"><b>{{ cart_item["name"] }}</b></div>
-                        <div class="small-text abel">R$ {{ cart_item["price"] }}</div>
+                        <div class="medium-text abel"><b>{{ cart_item["name"]|e }}</b></div>
+                        <div class="small-text abel">R$ {{ cart_item["price"]|e }}</div>
                     </div>
                     <div class="col-2 flex-grow-1 center">
                         <div class="row flex-grow-1 abel">
                             <div class="col padding-right-none">
-                                <button class="button-small" onclick="updateCart('{{ cart_item['id'] }}','add')">
+                                <button class="button-small" onclick="updateCart('{{ cart_item['id']|e }}','add')">
                                     +
                                 </button>
                             </div>
                             <div class="col">
-                                <div id="item-count-{{ cart_item['id'] }}">
-                                    {{ cart_item["count"] }}
+                                <div id="item-count-{{ cart_item['id']|e }}">
+                                    {{ cart_item["count"]|e }}
                                 </div>
                             </div>
                             <div class="col padding-left-none">
-                                <button class="button-small" onclick="updateCart('{{ cart_item['id'] }}','remove')">
+                                <button class="button-small" onclick="updateCart('{{ cart_item['id']|e }}','remove')">
                                     -
                                 </button>
                             </div>

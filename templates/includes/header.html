@@ -21,12 +21,12 @@
             <div class="col">
                 {% if logged %}
                     <button class="invisible_button" onclick="toggleOverlay()">
-                        <img src="{{ session['avatar'] }}" class="rounded" width="50px">
+                        <img src="{{ session['avatar']|e }}" class="rounded" width="50px">
 
                         <div id="notification-div">
                             {% if user.inventory_notifications + user.shop_notifications +
                               user.config_notifications + user.cart_notifications != 0 %}
-                                <div class="notification notification-medium abel" id="notification">{{ user.inventory_notifications + user.shop_notifications + user.config_notifications + user.cart_notifications }}</div>
+                                <div class="notification notification-medium abel" id="notification">{{ user.inventory_notifications + user.shop_notifications + user.config_notifications + user.cart_notifications | e}}</div>
                             {% endif %}
                         </div>
 
@@ -35,17 +35,17 @@
                                 <div class="col-10  w-100">
                                     <div class="row mb-2">
                                         <div class="col small-text">
-                                            {{ session['steam64id'] }}
+                                            {{ session['steam64id']|e }}
                                         </div>
                                     </div>
                                     <div class="row mb-2">
                                         <div class="col">
-                                            <img src="{{ session['avatar'] }}" class="rounded" width="75px">
+                                            <img src="{{ session['avatar']|e }}" class="rounded" width="75px">
                                         </div>
                                     </div>
                                     <div class="row mb-2">
                                         <div class="col">
-                                            Olá, {{ session['name'] }}!
+                                            Olá, {{ session['name']|e }}!
                                         </div>
                                     </div>
                                     <div class="row mb-2">
@@ -61,7 +61,7 @@
                                                         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA60lEQVR4nO3WsQpBURjA8VsmKwNG5Q1MJoOFlFmKJ7BY5QHkJZTJG9ydYrPZhZXBoAh/XX1ic45z7pH4z1/n11nOdzzvJwPGPFoA1U/AQScg4wS/BwxuNHQ8lwEVgaeu4SiwB85AwjXuy60bruEm4TR6BadDglcqt56HAPdV4F4IcE0FzltGL0BSBY4AG4vw7CX6hA8twl0duG4RLujAMVkYpu2DF1EZFnxiAfa1UIHbFuDWO3AK2BmgWyCuDQueC9YkcNQAD/LByL6F/m5AGVgHGwYomc4pJwfdW5rOfQVckkOXQNF07p/nqit4etkTHpfOQQAAAABJRU5ErkJggg==">
                                                         <div id="cart-notifications-div">
                                                             {% if user.cart_notifications != 0 %}
-                                                            <div id="cart-notifications-div" class="notification notification-small abel">{{ user.cart_notifications }}</div>
+                                                            <div id="cart-notifications-div" class="notification notification-small abel">{{ user.cart_notifications|e }}</div>
                                                             {% endif %}
                                                         </div>
                                                     </div>
@@ -77,7 +77,7 @@
                                                     <div class="col-3">
                                                         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA2klEQVR4nO3TIW4CQRiA0cGgEZWL6hlwNUWB4Aq9A7fgCrW9QgPoSs4ACGhlPUkFryFFkDZkhu0AC+FLNlkxMy+Z/BPCraqGOvqYb7/Nf/3YaA9Tf1vgCbXcYAtv4k3wkANs4gVrh/WK+zJgAwOslO8Lz7hLRdv4lK/NWY8p8Ez+PlLgWEMUO+sLjGKbQga42DOEx4VD5n3Vh53rqv0MUvMXOj4FXKpwSfAw8m6T3nUoAceGKWnYwqFwbN1/z6ke7FxXLf5uk951SIDf5W+ZAncz40t0ovCtq+sbZBDcyD3GSfcAAAAASUVORK5CYII=">
                                                         {% if user.inventory_notifications != 0 %}
-                                                            <div class="notification notification-small abel">{{ user.inventory_notifications }}</div>
+                                                            <div class="notification notification-small abel">{{ user.inventory_notifications|e }}</div>
                                                         {% endif %}
                                                     </div>
                                                     <div class="col-9 align-left">Inventário</div>

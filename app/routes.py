@@ -7,6 +7,7 @@ from app.services.notifications import add_cart_notification, remove_cart_notifi
 from app.exceptions.itemDontExistsException import ItemDontExistsException
 from app.exceptions.cartItemDontExistsException import cartItemDontExistsException
 import mercadopago
+import markupsafe
 import requests
 import datetime
 from urllib.parse import urlencode
@@ -59,11 +60,8 @@ def authorize():
 
         if 'response' in data and 'players' in data['response'] and len(data['response']['players']) > 0:
             player_data = data['response']['players'][0]
-            forbidden_characters = "${}<>%='\""
-            # TODO: Adicionar um endpoint para verificiar possiveis tentativas de SSTI
 
-            session['name'] = ''.join(
-                [char for char in player_data.get('personaname') if char not in forbidden_characters])
+            session['name'] = markupsafe.escape(player_data.get('personaname'))
             session['avatar'] = player_data.get('avatarfull')
             session['steam64id'] = steam_id
 

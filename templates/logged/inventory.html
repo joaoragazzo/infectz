@@ -23,8 +23,8 @@
                                     <img src="/static/img/itens/mi17.jpg" >
                                 </div>
 
-                                <h5 class="card-title abel text-center margin-top-low">{{ item.item.name }}</h5>
-                                <p class="card-text abel text-center">{{ item.date_bought }}</p>
+                                <h5 class="card-title abel text-center margin-top-low">{{ item.item.name | e}}</h5>
+                                <p class="card-text abel text-center">{{ item.date_bought | e }}</p>
                                 {% if not item.redeemed %}
                                     <button class="button-primary abel">Resgatar</button>
                                 {% else %}
