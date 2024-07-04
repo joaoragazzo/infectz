@@ -26,7 +26,7 @@
                         <div id="notification-div">
                             {% if user.inventory_notifications + user.shop_notifications +
                               user.config_notifications + user.cart_notifications != 0 %}
-                                <div class="notification notification-medium abel" id="notification">{{ user.inventory_notifications + user.shop_notifications + user.config_notifications + user.cart_notifications | e}}</div>
+                                <div class="notification notification-medium abel" id="notification">{{ user.inventory_notifications + user.shop_notifications + user.config_notifications + user.cart_notifications}}</div>
                             {% endif %}
                         </div>
 
