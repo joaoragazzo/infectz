@@ -20,9 +20,10 @@ def remove_cart_notification(steam64id: int, amount: int) -> None:
 
     user: User = User.query.filter_by(steam64id=steam64id).first()
 
-    user.cart_notifications -= amount
-    db.session.add(user)
-    db.session.commit()
+    if user.cart_notifications > 0:
+        user.cart_notifications -= amount
+        db.session.add(user)
+        db.session.commit()
 
 
 def empty_cart_notification(steam64id: int) -> None:
