@@ -68,49 +68,7 @@
         </div>
     </div>
 
-    <script>
-        function updateCart(item_id, action) {
-            const url = "/cart";
-            const data = new FormData();
-            data.append('item_id', item_id);
-            data.append('action', action);
-
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: data,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    if (response.status === 'success') {
-                        const itemCountElem = $('#item-count-' + item_id);
-                        let itemCount = parseInt(itemCountElem.text());
-
-                        if (action === 'add') {
-                            itemCount++;
-                        } else if (action === 'remove') {
-                            itemCount--;
-                        }
-
-                        if (itemCount <= 0) {
-                            $('#cart-item-' + item_id).remove();
-                        } else {
-                            itemCountElem.text(itemCount);
-                        }
-
-                        showFeedback(response.message, response.status);
-                    } else {
-                        showFeedback(response.message, response.status);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.log('Failed: ', error);
-                    showFeedback('Falha ao atualizar o carrinho.', 'error');
-                }
-            });
-        }
-
-    </script>
+    <script src="/static/js/update-cart.min.js"></script>
 
     {% include 'includes/logged_scripts.html' %}
 </body>
