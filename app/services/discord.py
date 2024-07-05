@@ -11,4 +11,4 @@ def send_webhook_discord_message(msg: str) -> None:
         "Content-Type": "application/json"
     }
 
-    requests.post(Config.DISCORD_WEBHOOK_URL, headers=headers, data=data)
+    requests.post(Config.DISCORD_WEBHOOK_URL, headers=headers, json=data)
