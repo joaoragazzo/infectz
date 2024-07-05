@@ -1,12 +1,10 @@
 from . import db
 
-
 class Clan(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     tag = db.Column(db.String(10), nullable=False)
     name = db.Column(db.String(255), nullable=False)
     leader_id = db.Column(db.BigInteger, db.ForeignKey('user.steam64id'), nullable=True)
-
 
 class User(db.Model):
     steam64id = db.Column(db.BigInteger, primary_key=True, unique=True, nullable=False)
@@ -21,14 +19,13 @@ class User(db.Model):
 
     clan = db.relationship('Clan', backref='members', foreign_keys=[clan_id])
     inventory = db.relationship('Inventory', backref='user_inventory', lazy=True)
-    cart = db.relationship('Cart', backref='user', lazy=True)
-
+    cart = db.relationship('Cart', backref='user_cart', lazy=True)
+    payments = db.relationship('Payment', backref='user_payments', lazy=True)
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
     active = db.Column(db.Boolean, default=True)
-
 
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -41,7 +38,9 @@ class Item(db.Model):
     active = db.Column(db.Boolean, default=True)
 
     category = db.relationship('Category', backref='items', lazy=True)
-
+    payments = db.relationship('Payment', backref='item_payments', lazy=True)
+    inventory_items = db.relationship('Inventory', backref='item_inventory', lazy=True)
+    cart_items = db.relationship('Cart', backref='item_cart', lazy=True)
 
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -51,9 +50,8 @@ class Payment(db.Model):
     created_at = db.Column(db.DateTime, nullable=False)
     payment_confirmed = db.Column(db.Boolean, default=False)
 
-    user = db.relationship('User', backref='payments', lazy=True)
-    item = db.relationship('Item', backref='payments', lazy=True)
-
+    user = db.relationship('User', backref='user_payments', lazy=True)
+    item = db.relationship('Item', backref='item_payments', lazy=True)
 
 class Inventory(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -63,15 +61,14 @@ class Inventory(db.Model):
     payment_id = db.Column(db.Integer, db.ForeignKey('payment.id'), nullable=False)
     date_bought = db.Column(db.DateTime, nullable=False)
 
-    user = db.relationship('User', backref='inventory_items', lazy=True)
-    item = db.relationship('Item', backref='inventory_items', lazy=True)
-    payment = db.relationship('Payment', backref='inventory_items', lazy=True)
-
+    user = db.relationship('User', backref='user_inventory', lazy=True)
+    item = db.relationship('Item', backref='item_inventory', lazy=True)
+    payment = db.relationship('Payment', backref='payment_inventory', lazy=True)
 
 class Cart(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.BigInteger, db.ForeignKey('user.steam64id'), nullable=False)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
 
-    user = db.relationship('User', backref='cart_items', lazy=True)
-    item = db.relationship('Item', backref='cart_items', lazy=True)
+    user = db.relationship('User', backref='user_cart', lazy=True)
+    item = db.relationship('Item', backref='item_cart', lazy=True)
