@@ -7,6 +7,7 @@ from app.services.notifications import add_cart_notification, remove_cart_notifi
 from app.exceptions.itemDontExistsException import ItemDontExistsException
 from app.exceptions.cartItemDontExistsException import cartItemDontExistsException
 from app.services.discord import send_webhook_discord_message
+import datetime
 import mercadopago
 import markupsafe
 import requests
@@ -66,10 +67,22 @@ def authorize():
             session['avatar'] = player_data.get('avatarfull')
             session['steam64id'] = steam_id
 
+            now = datetime.datetime.now()
+
             if User.query.filter_by(steam64id=steam_id).first() is None:
-                user = User(steam64id=steam_id)
-                db.session.add(user)
-                db.session.commit()
+                user = User(
+                    steam64id=steam_id,
+                    first_login=now,
+                    last_login=now
+
+                )
+            else:
+                user: User = User.query.filter_by(steam64id=steam_id).first()
+                user.last_login = now
+
+            db.session.add(user)
+            db.session.commit()
+
 
         return redirect('/')
     else:
