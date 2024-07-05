@@ -19,7 +19,7 @@ class User(db.Model):
     clan_id = db.Column(db.Integer, db.ForeignKey('clan.id'), nullable=True)
     role = db.Column(db.Enum('none', 'member', 'sub_leader', 'leader'), default='none', nullable=False)
 
-    clan = db.relationship('Clan', backref='members')
+    clan = db.relationship('Clan', backref='members', foreign_keys=[clan_id])
     inventory = db.relationship('Inventory', backref='user', lazy=True)
     cart = db.relationship('Cart', backref='user', lazy=True)
 
