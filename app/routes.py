@@ -81,6 +81,12 @@ def logout():
     return redirect('/', 302)
 
 
+@main.route('/mercadopago/payment-webhook', methods=['POST'])
+def mercadopago_payment_webhook():
+    data = request.get_json()
+    #TODO: Logica de negócios aqui
+    return jsonify({"status": "success"}), 200
+
 @main.route('/')
 def main_page():
     if session.get('steam64id') is not None:
