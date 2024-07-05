@@ -3,12 +3,17 @@ import os
 
 class Config:
     SECRET_KEY = f"{os.urandom(45)}"
+
     # sdk = mercadopago.SDK('TEST-4895180949334138-052121-b1da13509c6cdc1959dc03a74cb2c0ec-1566496776')
     MERCADO_PAGO_SDK_KEY = 'TEST-4895180949334138-052121-b1da13509c6cdc1959dc03a74cb2c0ec-1566496776'
     MERCADO_PAGO_PUBLIC_KEY = 'TEST-f5f63334-ed7a-4403-852d-b6cd067bc5e4'
     MERCADO_PAGO_WEBHOOK_SIGNATURE = '56af2bcaae10fc20fdbf528fd652176c5bf96be8ddfb39081fcc9d2f6f43dbfe'
+
     STEAM_API_KEY = "E41C0983D3EDF0DCD85BD43D0B0E5FCB"
     SERVER_SITE_URL = "https://infectz.0x6a70.com"  # Obs: Não colocar a '/' no final
+
+    DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1020587219091730512/pUUfuf6vcQk2RawN3NhwgphVMw9AOijVFDXJ-hRBCqAQ7Dc4i6kAse5HV7TzDnSzLqNz"
+
     SQLALCHEMY_DATABASE_URI = "mysql+pymysql://hg0x6a20_infectz:P8Cx3xbDqLSC0SbJTu@localhost/hg0x6a20_infectz"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_POOL_SIZE = 10

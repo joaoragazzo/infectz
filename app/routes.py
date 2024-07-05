@@ -6,6 +6,7 @@ from app.services.cart import add_cart_item, remove_cart_item
 from app.services.notifications import add_cart_notification, remove_cart_notification, empty_cart_notification
 from app.exceptions.itemDontExistsException import ItemDontExistsException
 from app.exceptions.cartItemDontExistsException import cartItemDontExistsException
+from app.services.discord import send_webhook_discord_message
 import mercadopago
 import markupsafe
 import requests
@@ -84,7 +85,7 @@ def logout():
 @main.route('/mercadopago/payment-webhook', methods=['POST'])
 def mercadopago_payment_webhook():
     data = request.get_json()
-    #TODO: Logica de negócios aqui
+    send_webhook_discord_message(str(data))
     return jsonify({"status": "success"}), 200
 
 @main.route('/')
