@@ -244,16 +244,16 @@ a {
     color: white;
 }
 
-.button-cancel:hover {
-    background-color: #740a0a;
-}
-
 .button-small:hover {
     background-color: #212121;
 }
 
 .button-primary:hover {
     background-color: #0b2d6c;
+}
+
+.button-cancel:hover {
+    background-color: #740a0a;
 }
 
 .button-primary-deactivated {
@@ -303,7 +303,11 @@ a {
 }
 
 .cart-content {
-    height: 90%;
+    height: 100%;
+}
+
+.payment-content {
+    height: 88%;
 }
 
 .cart-item {
@@ -326,7 +330,6 @@ a {
 .text-left {
     text-align: left;
 }
-
 
 .error-message {
     background-color: #bc0000;
@@ -379,9 +382,10 @@ a {
     text-align: center;
     font-size: 18px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-    animation: slide-down 0.5s ease-in-out, fade-out 0.5s ease-in-out 1.5s;
+    animation: slide-down 0.5s ease-in-out, fade-out 0.5s ease-in-out 4.5s;
 }
 
+/* Animações */
 @keyframes slide-down {
     from {
         transform: translateX(-50%) translateY(-100%);
@@ -400,4 +404,27 @@ a {
     to {
         opacity: 0;
     }
+}
+
+a.custom-underline {
+    text-decoration: none;
+    position: relative;
+}
+
+a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0.95);
+    height: 1px;
+    bottom: 0;
+    left: 0;
+    background-color: currentColor;
+    visibility: visible;
+    transition: all 0.3s ease-in-out;
+}
+
+a.custom-underline:hover::after {
+    transform: scaleX(1.05);
+    visibility: visible;
 }
