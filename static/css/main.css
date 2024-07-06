@@ -411,7 +411,7 @@ a.custom-underline {
     position: relative;
 }
 
-a::after {
+a.custom-underline::after {
     content: '';
     position: absolute;
     width: 100%;
