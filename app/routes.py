@@ -82,7 +82,6 @@ def authorize():
             db.session.add(user)
             db.session.commit()
 
-
         return redirect('/')
     else:
         return redirect('/')
@@ -245,12 +244,12 @@ def add_itens():
 @main.route('/pay')
 @login_required
 def pay():
-
     user = User.query.filter_by(steam64id=session['steam64id']).first()
-    return render_template(
-        user=user,
-        logged=True
-    )
+    return render_template('loja/pay.html',
+                           user=user,
+                           logged=True
+                           )
+
 
 @main.route('/loja/pagar')
 def pagar():
