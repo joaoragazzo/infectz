@@ -239,6 +239,9 @@ def pay():
 
     cart_items: list[Item] = Cart.query.filter_by(user_id=user.steam64id).all()
 
+    if not cart_items:
+        return redirect('/')
+
     cart_items_dict = defaultdict(lambda: {'count': 0, 'price': 0, 'image': '', 'id': 0})
 
     total_price = 0
