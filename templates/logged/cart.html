@@ -17,6 +17,12 @@
     <div class="container d-flex justify-content-center align-items-end position-relative margin-top-low">
         <div class="cart text-center">
             <div class="cart-content scrollable-container">
+                {% if len(cart_items) == 0 %}
+                    <div class="payment-content scrollable-container">
+                        <img src="/static/img/misc/empty.png" width="300px" style="padding-top: 70px;"><br>
+                        <p class="abel medium-text padding-top">Seu carrinho está muito vazio...</p>
+                    </div>
+                {% endif %}
                 {% for cart_item in cart_items %}
                 <div id="cart-item-{{ cart_item["id"]|e }}" class="cart-item row p-10">
                     <div class="col-auto p-0 small-icon">
