@@ -74,7 +74,6 @@ def authorize():
                     steam64id=steam_id,
                     first_login=now,
                     last_login=now
-
                 )
             else:
                 user: User = User.query.filter_by(steam64id=steam_id).first()
@@ -100,6 +99,7 @@ def mercadopago_payment_webhook():
     data = request.get_json()
     send_webhook_discord_message(str(data))
     return jsonify({"status": "success"}), 200
+
 
 @main.route('/')
 def main_page():
@@ -239,22 +239,22 @@ def add_itens():
     db.session.add(mi17)
     db.session.commit()
 
-    inventory_item1 = Inventory(user_id=76561198118616961, item_id=2, redeemed=True,
-                                date_bought=datetime.datetime.now())
-    db.session.add(inventory_item1)
-    db.session.commit()
-
-    inventory_item2 = Inventory(user_id=76561198118616961, item_id=3, redeemed=False,
-                                date_bought=datetime.datetime.now())
-    db.session.add(inventory_item2)
-    db.session.commit()
-
     return redirect('/')
 
 
+@main.route('/pay')
+@login_required
+def pay():
+
+    user = User.query.filter_by(steam64id=session['steam64id']).first()
+    return render_template(
+        user=user,
+        logged=True
+    )
+
 @main.route('/loja/pagar')
 def pagar():
-    return render_template('loja/pagar.html')
+    return render_template('loja/pay.html')
     # item_id = request.args.get('id')
     #
     # if item_id is None or (int(item_id) > 3 or int(item_id) < 1):
