@@ -59,7 +59,6 @@ class Inventory(db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
     redeemed = db.Column(db.Boolean, default=False)
     payment_id = db.Column(db.Integer, db.ForeignKey('payment.id'), nullable=False)
-    date_bought = db.Column(db.DateTime, nullable=False)
 
     user = db.relationship('User', backref='user_inventory', lazy=True)
     item = db.relationship('Item', backref='item_inventory', lazy=True)
