@@ -235,6 +235,19 @@ a {
     color: white;
 }
 
+.button-cancel {
+    width: 100%;
+    text-align: center;
+    background-color: #8b0d0d;
+    border: none;
+    border-radius: 5px;
+    color: white;
+}
+
+.button-cancel:hover {
+    background-color: #740a0a;
+}
+
 .button-small:hover {
     background-color: #212121;
 }
@@ -280,9 +293,13 @@ a {
     width: 60vw;
     min-width: 460px;
     max-width: 570px;
-    height: 68vh;
+    height: auto;
+    min-height: 68vh;
     border-radius: 15px;
-    padding: 20px
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .cart-content {
