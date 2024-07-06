@@ -17,7 +17,7 @@
     <div class="container d-flex justify-content-center align-items-end position-relative margin-top-low">
         <div class="cart text-center">
             <div class="cart-content scrollable-container">
-                {% if len(cart_items) == 0 %}
+                {% if not cart_items %}
                     <div class="payment-content scrollable-container">
                         <img src="/static/img/misc/empty.png" width="300px" style="padding-top: 70px;"><br>
                         <p class="abel medium-text padding-top">Seu carrinho está muito vazio...</p>
