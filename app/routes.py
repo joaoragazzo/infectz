@@ -7,8 +7,8 @@ from app.services.notifications import add_cart_notification, remove_cart_notifi
 from app.exceptions.itemDontExistsException import ItemDontExistsException
 from app.exceptions.cartItemDontExistsException import cartItemDontExistsException
 from app.services.discord import send_webhook_discord_message
-import datetime
 import mercadopago
+from collections import defaultdict
 import markupsafe
 import requests
 import datetime
@@ -115,32 +115,22 @@ def main_page():
 @main.route('/cart', methods=['GET'])
 @login_required
 def cart():
-    # TODO: refact this poorly code
     user: User = User.query.filter_by(steam64id=session['steam64id']).first()
     empty_cart_notification(user.steam64id)
 
     cart_items: list[Item] = Cart.query.filter_by(user_id=user.steam64id).all()
-    cart_items_final: list[dict] = []
-    already_in_cart: list[str] = []
+
+    cart_items_dict = defaultdict(lambda: {'count': 0, 'price': 0, 'image': '', 'id': 0})
 
     for cart_item in cart_items:
-        count = 0
-        for ci in cart_items:
-            if ci.item.name == cart_item.item.name:
-                count += 1
+        item_name = cart_item.item.name
+        cart_items_dict[item_name]['id'] = cart_item.item.id
+        cart_items_dict[item_name]['name'] = item_name
+        cart_items_dict[item_name]['count'] += 1
+        cart_items_dict[item_name]['price'] = cart_item.item.price
+        cart_items_dict[item_name]['image'] = cart_item.item.image_url
 
-        if cart_item.item.name not in already_in_cart:
-            cart_items_final.append(
-                {
-                    'id': cart_item.item.id,
-                    'name': cart_item.item.name,
-                    'count': count,
-                    'price': cart_item.item.price,
-                    'image': cart_item.item.image_url
-                }
-            )
-
-            already_in_cart.append(cart_item.item.name)
+    cart_items_final: list[dict] = list(cart_items_dict.values())
 
     return render_template('logged/cart.html',
                            user=user,
@@ -244,10 +234,31 @@ def add_itens():
 @main.route('/pay')
 @login_required
 def pay():
-    user = User.query.filter_by(steam64id=session['steam64id']).first()
+    user: User = User.query.filter_by(steam64id=session['steam64id']).first()
+    empty_cart_notification(user.steam64id)
+
+    cart_items: list[Item] = Cart.query.filter_by(user_id=user.steam64id).all()
+
+    cart_items_dict = defaultdict(lambda: {'count': 0, 'price': 0, 'image': '', 'id': 0})
+
+    total_price = 0
+
+    for cart_item in cart_items:
+        total_price += cart_item.item.price
+        item_name = cart_item.item.name
+        cart_items_dict[item_name]['id'] = cart_item.item.id
+        cart_items_dict[item_name]['name'] = item_name
+        cart_items_dict[item_name]['count'] += 1
+        cart_items_dict[item_name]['price'] = cart_item.item.price
+        cart_items_dict[item_name]['image'] = cart_item.item.image_url
+
+    cart_items_final: list[dict] = list(cart_items_dict.values())
+
     return render_template('loja/pay.html',
                            user=user,
-                           logged=True
+                           logged=True,
+                           cart_items=cart_items_final,
+                           total_price=total_price
                            )
 
 
