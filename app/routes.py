@@ -66,6 +66,7 @@ def authorize():
             session['name'] = markupsafe.escape(player_data.get('personaname'))
             session['avatar'] = player_data.get('avatarfull')
             session['steam64id'] = steam_id
+            session['notifications'] = []
 
             now = datetime.datetime.now()
 
@@ -106,7 +107,11 @@ def main_page():
     if session.get('steam64id') is not None:
         user = User.query.filter_by(steam64id=session['steam64id']).first()
 
-    return render_template('main.html', user=user)
+    notifications = session.pop('notifications', [])
+    return render_template('main.html',
+                           user=user,
+                           notifications=notifications
+                           )
 
 
 @main.route('/cart', methods=['GET'])
@@ -233,6 +238,13 @@ def pay():
     cart_items: list[Item] = Cart.query.filter_by(user_id=user.steam64id).all()
 
     if not cart_items:
+        session['notifications'].append(
+            {
+                'type': 'error-message',
+                'content': 'Impossível prosseguir. Seu carrinho está vazio.'
+            }
+        )
+
         return redirect('/')
 
     cart_items_dict = defaultdict(lambda: {'count': 0, 'price': 0, 'image': '', 'id': 0})
