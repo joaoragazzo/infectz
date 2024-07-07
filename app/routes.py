@@ -102,14 +102,11 @@ def mercadopago_payment_webhook():
 
 @main.route('/')
 def main_page():
+    user: User = None
     if session.get('steam64id') is not None:
         user = User.query.filter_by(steam64id=session['steam64id']).first()
-        return render_template('main.html',
-                               logged=True,
-                               user=user
-                               )
 
-    return render_template('main.html', logged=False)
+    return render_template('main.html', user=user)
 
 
 @main.route('/cart', methods=['GET'])
@@ -134,7 +131,6 @@ def cart():
 
     return render_template('logged/cart.html',
                            user=user,
-                           logged=True,
                            cart_items=cart_items_final
                            )
 
@@ -176,9 +172,7 @@ def shop():
 
     return render_template('loja/store.html',
                            user=user,
-                           store=store,
-                           server_site_url=Config.SERVER_SITE_URL,
-                           logged=True,
+                           store=store
                            )
 
 
@@ -190,7 +184,6 @@ def inventory():
     return render_template('logged/inventory.html',
                            user=user,
                            inventory=(inventory if inventory is not None else []),
-                           logged=True
                            )
 
 
@@ -259,7 +252,6 @@ def pay():
 
     return render_template('loja/pay.html',
                            user=user,
-                           logged=True,
                            cart_items=cart_items_final,
                            total_price=total_price
                            )

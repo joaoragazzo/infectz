@@ -19,7 +19,7 @@
                 </a>
             </div>
             <div class="col">
-                {% if logged %}
+                {% if user %}
                     <button class="invisible_button" onclick="toggleOverlay()">
                         <img src="{{ session['avatar']|e }}" class="rounded" width="50px">
 
