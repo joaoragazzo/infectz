@@ -1,6 +1,6 @@
 {% if notifications %}
     <p>encontrou essas parada</p>
     {% for notification in notifications %}
-        <div class="{{ notification["type"] | e}}">{{ notification["content"] | e}}</div>
+        <div class="feedback {{ notification["type"] | e}}">{{ notification["content"] | e}}</div>
     {% endfor %}
 {% endif %}
