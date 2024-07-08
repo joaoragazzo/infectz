@@ -242,12 +242,13 @@ def pay():
         if 'notifications' not in session:
             session['notifications'] = []
 
-        session['notifications'].append(
+        session['notifications'] = [
             {
                 'type': 'error-message',
                 'content': 'Impossível prosseguir. Seu carrinho está vazio.'
             }
-        )
+        ]
+
 
         return redirect('/')
 
