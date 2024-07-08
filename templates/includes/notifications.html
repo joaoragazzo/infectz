@@ -1,5 +1,6 @@
+<p>Importou, importou</p>
 {% if notifications %}
-    <div>tristeza de nao estar funcionando</div>
+    <p>encontrou essas parada</p>
     {% for notification in notifications %}
         <div class="{{ notification["type"] | e}}">{{ notification["content"] | e}}</div>
     {% endfor %}

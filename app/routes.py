@@ -241,6 +241,9 @@ def pay():
     cart_items: list[Item] = Cart.query.filter_by(user_id=user.steam64id).all()
 
     if not cart_items:
+        if 'notifications' not in session:
+            session['notifications'] = []
+
         session['notifications'].append(
             {
                 'type': 'error-message',
