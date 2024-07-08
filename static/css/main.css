@@ -428,3 +428,13 @@ a.custom-underline:hover::after {
     transform: scaleX(1.05);
     visibility: visible;
 }
+
+.emphase {
+    background-color: #505050;
+    padding: 5px 10px 5px 10px;
+    border-radius: 5px;
+}
+
+.fit-content {
+    min-height: fit-content;
+}

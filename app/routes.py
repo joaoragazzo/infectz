@@ -266,6 +266,35 @@ def pay():
                            )
 
 
+@main.route('/pay/details')
+@login_required
+def pay_details():
+    user: User = User.query.filter_by(steam64id=session['steam64id']).first()
+    empty_cart_notification(user.steam64id)
+
+    cart_items: list[Item] = Cart.query.filter_by(user_id=user.steam64id).all()
+
+    if not cart_items:
+        send_notification(session, NotificationsTypes.ERROR.value, "Seu carrinho está vazio. Impossível de prosseguir.")
+        return redirect('/')
+
+    return render_template('loja/collect-informations.html', user=user)
+
+
+@main.route('/pay/checkout')
+@login_required
+def pay_checkout():
+    user: User = User.query.filter_by(steam64id=session['steam64id']).first()
+    empty_cart_notification(user.steam64id)
+
+    cart_items: list[Item] = Cart.query.filter_by(user_id=user.steam64id).all()
+
+    if not cart_items:
+        send_notification(session, NotificationsTypes.ERROR.value, "Seu carrinho está vazio. Impossível de prosseguir.")
+        return redirect('/')
+
+    return render_template('loja/pix.html', user=user)
+
 @main.route('/loja/pagar')
 def pagar():
     return render_template('loja/pay.html')
