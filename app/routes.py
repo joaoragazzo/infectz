@@ -107,7 +107,8 @@ def main_page():
     if session.get('steam64id') is not None:
         user = User.query.filter_by(steam64id=session['steam64id']).first()
 
-    notifications = session.pop('notifications', [])
+    notifications = session['notifications']
+    session['notifications'] = []
     return render_template('main.html',
                            user=user,
                            notifications=notifications
