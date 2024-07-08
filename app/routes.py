@@ -241,7 +241,7 @@ def pay():
     cart_items: list[Item] = Cart.query.filter_by(user_id=user.steam64id).all()
 
     if not cart_items:
-        send_notification(session, NotificationsTypes.ERROR.value, "Seu carrinho está vazinho. Impossível de prosseguir.")
+        send_notification(session, NotificationsTypes.ERROR.value, "Seu carrinho está vazio. Impossível de prosseguir.")
         return redirect('/')
 
     cart_items_dict = defaultdict(lambda: {'count': 0, 'price': 0, 'image': '', 'id': 0})
