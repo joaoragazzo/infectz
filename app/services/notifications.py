@@ -36,4 +36,13 @@ def empty_cart_notification(steam64id: int) -> None:
     db.session.commit()
 
 
+def send_notification(session, type: str, content: str) -> None:
+    if 'notifications' not in session:
+        session['notifications'] = []
 
+    session['notifications'] = [
+        {
+            'type': f'{type}',
+            'content': f'{content}'
+        }
+    ]

@@ -3,7 +3,8 @@ from app.config import Config
 from app.models import db, Item, User, Inventory, Category, Cart
 from app.middleware import login_required
 from app.services.cart import add_cart_item, remove_cart_item
-from app.services.notifications import add_cart_notification, remove_cart_notification, empty_cart_notification
+from app.services.notifications import add_cart_notification, remove_cart_notification, empty_cart_notification, send_notification
+from app.enums.notificationsTypes import NotificationsTypes
 from app.exceptions.itemDontExistsException import ItemDontExistsException
 from app.exceptions.cartItemDontExistsException import cartItemDontExistsException
 from app.services.discord import send_webhook_discord_message
@@ -240,17 +241,7 @@ def pay():
     cart_items: list[Item] = Cart.query.filter_by(user_id=user.steam64id).all()
 
     if not cart_items:
-        if 'notifications' not in session:
-            session['notifications'] = []
-
-        session['notifications'] = [
-            {
-                'type': 'error-message',
-                'content': 'Impossível prosseguir. Seu carrinho está vazio.'
-            }
-        ]
-
-
+        send_notification(session, NotificationsTypes.ERROR.value, "Seu carrinho está vazinho. Impossível de prosseguir.")
         return redirect('/')
 
     cart_items_dict = defaultdict(lambda: {'count': 0, 'price': 0, 'image': '', 'id': 0})
