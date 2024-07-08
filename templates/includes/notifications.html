@@ -1,4 +1,5 @@
 {% if notifications %}
+    <div>tristeza de nao estar funcionando</div>
     {% for notification in notifications %}
         <div class="{{ notification["type"] | e}}">{{ notification["content"] | e}}</div>
     {% endfor %}
