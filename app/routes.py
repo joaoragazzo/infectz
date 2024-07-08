@@ -8,7 +8,8 @@ from app.enums.notificationsTypes import NotificationsTypes
 from app.exceptions.itemDontExistsException import ItemDontExistsException
 from app.exceptions.cartItemDontExistsException import cartItemDontExistsException
 from app.services.discord import send_webhook_discord_message
-import mercadopago
+from app.services.utils import is_valid_cpf
+from mercadopago import SDK
 from collections import defaultdict
 import markupsafe
 import requests
@@ -17,6 +18,7 @@ from urllib.parse import urlencode
 
 main = Blueprint('main', __name__)
 
+mercadopago_sdk = SDK(Config.MERCADO_PAGO_SDK_KEY)
 
 @main.route('/login')
 def login():
@@ -281,7 +283,7 @@ def pay_details():
     return render_template('loja/collect-informations.html', user=user)
 
 
-@main.route('/pay/checkout')
+@main.route('/pay/checkout', methods=['POST'])
 @login_required
 def pay_checkout():
     user: User = User.query.filter_by(steam64id=session['steam64id']).first()
@@ -289,9 +291,84 @@ def pay_checkout():
 
     cart_items: list[Item] = Cart.query.filter_by(user_id=user.steam64id).all()
 
-    if not cart_items:
-        send_notification(session, NotificationsTypes.ERROR.value, "Seu carrinho está vazio. Impossível de prosseguir.")
+    try:
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        cpf = request.form['cpf']
+        email = request.form['email']
+
+        zipcode = request.form['zip_code']
+        federal_unity = request.form['federal_unit']
+        city = request.form['city']
+        neighborhood = request.form['neighborhood']
+        street_name = request.form['street_name']
+        street_number = request.form['street_number']
+    except KeyError:
+        send_notification(session, NotificationsTypes.ERROR.value,
+                          "As informações não foram preenchidas corretamente. Impossível prosseguir.")
         return redirect('/')
+
+    federal_units = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR",
+                     "PE",
+                     "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"]
+    cpf = cpf.replace("-", "").replace(".", '')
+    zipcode = zipcode.replace("-", "")
+
+    if not cart_items:
+        send_notification(session, NotificationsTypes.ERROR.value,
+                          "Seu carrinho está vazio. Impossível de prosseguir.")
+        return redirect('/')
+
+    if not is_valid_cpf(cpf):
+        send_notification(session, NotificationsTypes.ERROR.value,
+                          "O CPF fornecido é inválido. Impossível prosseguir.")
+        return redirect('/')
+
+    if federal_unity not in federal_units:
+        send_notification(session, NotificationsTypes.ERROR.value,
+                          "O estado fornecido é inválido. Impossível prosseguir.")
+        return redirect('/')
+
+    if len(zipcode) != 8 or not zipcode.isdigit():
+        send_notification(session, NotificationsTypes.ERROR.value,
+                          "O CEP fornecido é inválido. Impossível prosseguir.")
+        return redirect('/')
+
+    total_value = 0
+    for item in cart_items:
+        total_value += item.item.price
+
+    payment_data = {
+        "transaction_amount": total_value,
+        "description": "Doação",
+        "payment_method_id": "pix",
+        "payer": {
+            "email": email,
+            "first_name": first_name,
+            "last_name": last_name,
+            "identification": {
+                "type": "cpf",
+                "number": cpf
+            },
+            "address": {
+                "zip_code": zipcode,
+                "street_name": street_name,
+                "street_number": street_number,
+                "neighborhood": neighborhood,
+                "city": city,
+                "federal_unit": federal_unity
+            }
+        }
+    }
+
+    payment_response = mercadopago_sdk.payment().create(payment_data)
+
+    return render_template('loja/pix.html',
+                           base64qrcode=payment_response['response']['point_of_interaction']['transaction_data'][
+                               'qr_code_base64']
+                           )
+
+
 
     return render_template('loja/pix.html', user=user)
 
