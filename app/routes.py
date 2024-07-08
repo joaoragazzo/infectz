@@ -364,64 +364,12 @@ def pay_checkout():
     payment_response = mercadopago_sdk.payment().create(payment_data)
 
     return render_template('loja/pix.html',
-                           base64qrcode=payment_response['response']['point_of_interaction']['transaction_data'][
-                               'qr_code_base64']
+                           base64qrcode=payment_response['response']['point_of_interaction']
+                           ['transaction_data']['qr_code_base64'],
+                           user=user
                            )
 
 
 
     return render_template('loja/pix.html', user=user)
 
-@main.route('/loja/pagar')
-def pagar():
-    return render_template('loja/pay.html')
-    # item_id = request.args.get('id')
-    #
-    # if item_id is None or (int(item_id) > 3 or int(item_id) < 1):
-    #     return redirect('/loja/itens', 302)
-    #
-    # itens = {
-    #     '1': "arma",
-    #     '2': "carro",
-    #     '3': "helicotero"
-    # }
-    #
-    # itens_value = {
-    #     '1': '10',
-    #     '2': '20',
-    #     '3': '30'
-    # }
-    #
-    # request_option = config.RequestOptions()
-    #
-    # payment_data = {
-    #     "transaction_amount": int(itens_value[item_id]),
-    #     "description": f"{itens[item_id]}",
-    #     "payment_method_id": "pix",
-    #     "payer": {
-    #         "email": "payer_mail@gmail.com",
-    #         "first_name": "test",
-    #         "last_name": "user",
-    #         "identification": {
-    #             "type": "cpf",
-    #             "number": "39297642888"
-    #         },
-    #         "address": {
-    #             "zip_code": "13990000",
-    #             "street_name": "Av. das Nações Unidas",
-    #             "street_number": "3003",
-    #             "neighborhood": "Bonfim",
-    #             "city": "Osasco",
-    #             "federal_unit": "SP"
-    #         }
-    #     }
-    # }
-    #
-    # payment_response = sdk.payment().create(payment_data, request_option)
-    #
-    # return render_template('loja/process_payment.html',
-    #                        item_name=f'{itens[item_id]}',
-    #                        item_value=f'{itens_value[item_id]} real',
-    #                        base64qrcode=payment_response['response']['point_of_interaction']['transaction_data'][
-    #                            'qr_code_base64']
-    #                        )
