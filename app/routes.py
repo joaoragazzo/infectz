@@ -1,9 +1,8 @@
-from flask import render_template, request, redirect, session, Blueprint, flash, jsonify
+from flask import render_template, request, redirect, session, Blueprint, jsonify
 from app.config import Config
 from app.models import db, Item, User, Inventory, Category, Cart, Payment
 from app.middleware import login_required
-from app.services.cart import add_cart_item, remove_cart_item
-from app.services.notifications import add_cart_notification, remove_cart_notification, empty_cart_notification, send_notification
+
 from app.enums.notificationsTypes import NotificationsTypes
 from app.exceptions.itemDontExistsException import ItemDontExistsException
 from app.exceptions.cartItemDontExistsException import cartItemDontExistsException
@@ -11,6 +10,12 @@ from app.services.discord import send_webhook_discord_message
 from app.services.utils import is_valid_cpf
 from mercadopago import SDK
 from collections import defaultdict
+
+import app.services.notifications as notification_service
+import app.services.cart as cart_service
+import app.services.user as user_service
+import app.services.inventory as inventory_service
+
 import markupsafe
 import requests
 import datetime
@@ -52,12 +57,12 @@ def authorize():
 
     response = requests.post('https://steamcommunity.com/openid/login', data=params)
     if 'is_valid:true' in response.text:
-        steam_id = request.args.get('openid.claimed_id').split('/')[-1]
+        steam64id = request.args.get('openid.claimed_id').split('/')[-1]
 
         url = 'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/'
         params = {
             'key': Config.STEAM_API_KEY,
-            'steamids': steam_id
+            'steamids': steam64id
         }
 
         response = requests.get(url, params=params)
@@ -68,19 +73,19 @@ def authorize():
 
             session['name'] = markupsafe.escape(player_data.get('personaname'))
             session['avatar'] = player_data.get('avatarfull')
-            session['steam64id'] = steam_id
+            session['steam64id'] = steam64id
             session['notifications'] = []
 
             now = datetime.datetime.now()
 
-            if User.query.filter_by(steam64id=steam_id).first() is None:
+            if not user_service.user_exists(steam64id):
                 user = User(
-                    steam64id=steam_id,
+                    steam64id=steam64id,
                     first_login=now,
                     last_login=now
                 )
             else:
-                user: User = User.query.filter_by(steam64id=steam_id).first()
+                user: User = user_service.get_user_by_steam64id(steam64id)
                 user.last_login = now
 
             db.session.add(user)
@@ -109,9 +114,8 @@ def main_page():
     user: User = None
     notifications = []
     if session.get('steam64id') is not None:
-        user = User.query.filter_by(steam64id=session['steam64id']).first()
-        notifications = session['notifications'].copy()
-        session['notifications'] = []
+        user: User = user_service.get_user_by_session(session)
+        notifications = notification_service.get_temporary_notifications(session)
 
     return render_template('main.html',
                            user=user,
@@ -122,10 +126,11 @@ def main_page():
 @main.route('/cart', methods=['GET'])
 @login_required
 def cart():
-    user: User = User.query.filter_by(steam64id=session['steam64id']).first()
-    empty_cart_notification(user.steam64id)
+    user: User = user_service.get_user_by_session(session)
 
-    cart_items: list[Item] = Cart.query.filter_by(user_id=user.steam64id).all()
+    cart_items: list[Cart] = cart_service.get_all_cart_items(session)
+
+    notification_service.empty_cart_notification(session)
 
     cart_items_dict = defaultdict(lambda: {'count': 0, 'price': 0, 'image': '', 'id': 0})
 
@@ -148,7 +153,7 @@ def cart():
 @main.route('/cart', methods=['POST'])
 @login_required
 def cart_add_item():
-    user: User = User.query.filter_by(steam64id=session['steam64id']).first()
+    user: User = user_service.get_user_by_session(session)
 
     item_id: int = int(request.form.get('item_id'))
     action: str = request.form.get('action')
@@ -158,14 +163,14 @@ def cart_add_item():
 
     try:
         if action == 'add':
-            add_cart_item(user.steam64id, item_id)
-            add_cart_notification(user.steam64id, 1)
+            cart_service.add_cart_item(session, item_id)
+            notification_service.add_cart_notification(session, 1)
             message: str = "Item adicionado com sucesso!"
             status: str = "success"
 
         elif action == 'remove':
-            remove_cart_item(user.steam64id, item_id)
-            remove_cart_notification(user.steam64id, 1)
+            cart_service.remove_cart_item(session, item_id)
+            notification_service.remove_cart_notification(session, 1)
             message: str = "Item removido com sucesso!"
             status: str = "success"
     except (ItemDontExistsException, cartItemDontExistsException):
@@ -178,7 +183,7 @@ def cart_add_item():
 @login_required
 def shop():
     store = Category.query.all()
-    user = User.query.filter_by(steam64id=session['steam64id']).first()
+    user: User = user_service.get_user_by_session(session)
 
     return render_template('loja/store.html',
                            user=user,
@@ -189,8 +194,9 @@ def shop():
 @main.route('/inventory')
 @login_required
 def inventory():
-    inventory = Inventory.query.filter_by(user_id=session['steam64id']).all()
-    user = User.query.filter_by(steam64id=session['steam64id']).first()
+    user: User = user_service.get_user_by_session(session)
+    inventory: list[Inventory] = inventory_service.get_inventory(session)
+
     return render_template('logged/inventory.html',
                            user=user,
                            inventory=(inventory if inventory is not None else []),
@@ -237,13 +243,13 @@ def add_itens():
 @main.route('/pay')
 @login_required
 def pay():
-    user: User = User.query.filter_by(steam64id=session['steam64id']).first()
-    empty_cart_notification(user.steam64id)
+    user: User = user_service.get_user_by_session(session)
+    notification_service.empty_cart_notification(session)
 
-    cart_items: list[Item] = Cart.query.filter_by(user_id=user.steam64id).all()
+    cart_items: list[Cart] = cart_service.get_all_cart_items(session)
 
     if not cart_items:
-        send_notification(session, NotificationsTypes.ERROR.value, "Seu carrinho está vazio. Impossível de prosseguir.")
+        notification_service.send_notification(session, NotificationsTypes.ERROR.value, "Seu carrinho está vazio. Impossível de prosseguir.")
         return redirect('/')
 
     cart_items_dict = defaultdict(lambda: {'count': 0, 'price': 0, 'image': '', 'id': 0})
@@ -271,13 +277,13 @@ def pay():
 @main.route('/pay/details')
 @login_required
 def pay_details():
-    user: User = User.query.filter_by(steam64id=session['steam64id']).first()
-    empty_cart_notification(user.steam64id)
+    user: User = user_service.get_user_by_session(session)
+    notification_service.empty_cart_notification(session)
 
-    cart_items: list[Item] = Cart.query.filter_by(user_id=user.steam64id).all()
+    cart_items: list[Item] = cart_service.get_all_cart_items(session)
 
     if not cart_items:
-        send_notification(session, NotificationsTypes.ERROR.value, "Seu carrinho está vazio. Impossível de prosseguir.")
+        notification_service.send_notification(session, NotificationsTypes.ERROR.value, "Seu carrinho está vazio. Impossível de prosseguir.")
         return redirect('/')
 
     return render_template('loja/collect-informations.html', user=user)
@@ -286,10 +292,10 @@ def pay_details():
 @main.route('/pay/checkout', methods=['POST'])
 @login_required
 def pay_checkout():
-    user: User = User.query.filter_by(steam64id=session['steam64id']).first()
-    empty_cart_notification(user.steam64id)
+    user: User = user_service.get_user_by_session(session)
+    notification_service.empty_cart_notification(session)
 
-    cart_items: list[Item] = Cart.query.filter_by(user_id=user.steam64id).all()
+    cart_items: list[Item] = cart_service.get_all_cart_items(session)
 
     try:
         first_name = request.form['first_name']
@@ -304,7 +310,7 @@ def pay_checkout():
         street_name = request.form['street_name']
         street_number = request.form['street_number']
     except KeyError:
-        send_notification(session, NotificationsTypes.ERROR.value,
+        notification_service.send_notification(session, NotificationsTypes.ERROR.value,
                           "As informações não foram preenchidas corretamente. Impossível prosseguir.")
         return redirect('/')
 
@@ -315,22 +321,22 @@ def pay_checkout():
     zipcode = zipcode.replace("-", "")
 
     if not cart_items:
-        send_notification(session, NotificationsTypes.ERROR.value,
+        notification_service.send_notification(session, NotificationsTypes.ERROR.value,
                           "Seu carrinho está vazio. Impossível de prosseguir.")
         return redirect('/')
 
     if not is_valid_cpf(cpf):
-        send_notification(session, NotificationsTypes.ERROR.value,
+        notification_service.send_notification(session, NotificationsTypes.ERROR.value,
                           "O CPF fornecido é inválido. Impossível prosseguir.")
         return redirect('/')
 
     if federal_unity not in federal_units:
-        send_notification(session, NotificationsTypes.ERROR.value,
+        notification_service.send_notification(session, NotificationsTypes.ERROR.value,
                           "O estado fornecido é inválido. Impossível prosseguir.")
         return redirect('/')
 
     if len(zipcode) != 8 or not zipcode.isdigit():
-        send_notification(session, NotificationsTypes.ERROR.value,
+        notification_service.send_notification(session, NotificationsTypes.ERROR.value,
                           "O CEP fornecido é inválido. Impossível prosseguir.")
         return redirect('/')
 
