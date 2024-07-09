@@ -370,6 +370,7 @@ def pay_checkout():
     return render_template('loja/pix.html',
                            base64qrcode=base64qrcode,
                            qr_code_min=qr_code_min,
+                           qr_code=qr_code,
                            user=user
                            )
 
