@@ -1,5 +1,6 @@
 import mercadopago
 from app.config import Config
+from run import logger
 
 mercadopago_sdk = mercadopago.SDK(Config.MERCADO_PAGO_SDK_KEY)
 
@@ -31,6 +32,8 @@ def create_payment(total_value: int, email: str, first_name: str, last_name: str
     }
 
     payment_response = mercadopago_sdk.payment().create(payment_data)
+    logger.debug(payment_response['response'])
+    logger.debug(payment_response)
     return (payment_response['response']['id'],
             payment_response['response']['point_of_interaction']['transaction_data']['qr_code_base64'],
             payment_response['response']['point_of_interaction']['transaction_data']['qr_code'])
