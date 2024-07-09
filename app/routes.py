@@ -1,7 +1,13 @@
+from run import logger
+
+logger.debug('Point #1')
+
 from flask import render_template, request, redirect, session, Blueprint, jsonify
 from app.config import Config
 from app.models import db, Item, User, Inventory, Category, Cart, Payment
 from app.middleware import login_required
+
+logger.debug('Point #2')
 
 from app.enums.notificationsTypes import NotificationsTypes
 from app.exceptions.itemDontExistsException import ItemDontExistsException
@@ -11,15 +17,21 @@ from app.services.utils import is_valid_cpf
 from mercadopago import SDK
 from collections import defaultdict
 
+logger.debug('Point #3')
+
 import app.services.notifications as notification_service
 import app.services.cart as cart_service
 import app.services.user as user_service
 import app.services.inventory as inventory_service
 
+logger.debug('Point #4')
+
 import markupsafe
 import requests
 import datetime
 from urllib.parse import urlencode
+
+logger.debug('Point #5')
 
 main = Blueprint('main', __name__)
 
