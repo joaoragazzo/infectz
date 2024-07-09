@@ -363,13 +363,15 @@ def pay_checkout():
 
     payment_response = mercadopago_sdk.payment().create(payment_data)
 
+    base64qrcode = payment_response['response']['point_of_interaction']['transaction_data']['qr_code_base64']
+    qr_code = payment_response['response']['point_of_interaction']['transaction_data']['qr_code']
+    qr_code_min = qr_code[:10]
+
     return render_template('loja/pix.html',
-                           base64qrcode=payment_response['response']['point_of_interaction']
-                           ['transaction_data']['qr_code_base64'],
+                           base64qrcode=base64qrcode,
+                           qr_code_min=qr_code_min,
                            user=user
                            )
 
 
-
-    return render_template('loja/pix.html', user=user)
 
