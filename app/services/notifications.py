@@ -1,7 +1,15 @@
+from run import logger
+
+logger.debug("Fazendo os imports das bibliotecas do notification service")
+logger.debug("Import #1")
 from app.models import User, db
+logger.debug("Import #2")
 from app.exceptions.userDontExitsException import UserDontExistsException
+logger.debug("Import #3")
 from app.services.user import user_exists
+logger.debug("Import #4")
 from flask.sessions import SessionMixin
+logger.debug("Feito com sucesso!")
 
 
 def add_cart_notification(session: SessionMixin, amount: int) -> None:
