@@ -365,7 +365,7 @@ def pay_checkout():
 
     base64qrcode = payment_response['response']['point_of_interaction']['transaction_data']['qr_code_base64']
     qr_code = payment_response['response']['point_of_interaction']['transaction_data']['qr_code']
-    qr_code_min = qr_code[:10]
+    qr_code_min = qr_code[:27]
 
     return render_template('loja/pix.html',
                            base64qrcode=base64qrcode,
