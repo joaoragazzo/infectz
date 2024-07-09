@@ -1,13 +1,9 @@
 from run import logger
 
-logger.debug('Point #1')
-
 from flask import render_template, request, redirect, session, Blueprint, jsonify
 from app.config import Config
 from app.models import db, Item, User, Inventory, Category, Cart, Payment
 from app.middleware import login_required
-
-logger.debug('Point #2')
 
 from app.enums.notificationsTypes import NotificationsTypes
 from app.exceptions.itemDontExistsException import ItemDontExistsException
@@ -17,21 +13,27 @@ from app.services.utils import is_valid_cpf
 from mercadopago import SDK
 from collections import defaultdict
 
-logger.debug('Point #3')
-
+logger.debug('Tentando importar notification_service')
 import app.services.notifications as notification_service
-import app.services.cart as cart_service
-import app.services.user as user_service
-import app.services.inventory as inventory_service
+logger.debug('Importação notification_service com sucesso!')
 
-logger.debug('Point #4')
+logger.debug('Tentando importar cart_service')
+import app.services.cart as cart_service
+logger.debug('Importação cart_service com sucesso!')
+
+logger.debug('Tentando importar user_service')
+import app.services.user as user_service
+logger.debug('Importação user_service com sucesso!')
+
+logger.debug('Tentando importar inventory_service')
+import app.services.inventory as inventory_service
+logger.debug('Importação inventory_service com sucesso!')
 
 import markupsafe
 import requests
 import datetime
 from urllib.parse import urlencode
 
-logger.debug('Point #5')
 
 main = Blueprint('main', __name__)
 
