@@ -19,12 +19,12 @@ logger.addHandler(console_handler)
 
 logger.debug('Logger configurado. Iniciando a criação da aplicação...')
 
-try:
-    from app import create_app
-    app = create_app()
-except Exception as e:
-    logger.exception("Erro ao criar a aplicação: ")
-    raise
+#try:
+#    from app import create_app
+#    app = create_app()
+#except Exception as e:
+#    logger.exception("Erro ao criar a aplicação: ")
+#    raise
 
-if __name__ == '__main__':
-    app.run()
+#if __name__ == '__main__':
+#    app.run()
