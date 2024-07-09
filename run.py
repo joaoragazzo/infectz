@@ -2,22 +2,24 @@ import logging
 from logging.handlers import RotatingFileHandler
 import sys
 
+# Configurando o logger raiz
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
+# Configurando o manipulador de arquivo rotativo
 file_handler = RotatingFileHandler('early_error.log', maxBytes=10000, backupCount=3)
 file_handler.setLevel(logging.DEBUG)
 file_formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]')
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
-console_handler = logging.StreamHandler(sys.stdout)
-console_handler.setLevel(logging.DEBUG)
-console_formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]')
-console_handler.setFormatter(console_formatter)
-logger.addHandler(console_handler)
+# Testando o log para garantir que está funcionando
+logger.debug('Logger configurado. Testando a escrita no arquivo de log.')
 
-logger.debug('Logger configurado. Iniciando a criação da aplicação...')
+# Forçando a escrita dos logs no disco
+for handler in logger.handlers:
+    handler.flush()
+    handler.close()
 
 #try:
 #    from app import create_app
