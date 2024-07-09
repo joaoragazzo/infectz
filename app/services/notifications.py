@@ -50,6 +50,8 @@ def send_notification(session: SessionMixin, type: str, content: str) -> None:
 
 
 def get_temporary_notifications(session: SessionMixin) -> list[dict]:
-    notifications = session['notifications'].copy()
-    session['notifications'] = []
-    return notifications
+    if session.get('notifications') is not None:
+        notifications = session['notifications'].copy()
+        session['notifications'] = []
+        return notifications
+    return []
