@@ -20,6 +20,8 @@ import app.services.cart as cart_service
 import app.services.user as user_service
 import app.services.inventory as inventory_service
 import app.services.utils as utils_service
+import app.services.mercadopago as mercadopago_service
+import app.services.payment as payment_service
 
 import markupsafe
 import requests
@@ -321,43 +323,12 @@ def pay_checkout():
     for item in cart_items:
         total_value += item.item.price
 
-    payment_data = {
-        "transaction_amount": total_value,
-        "description": "Doação",
-        "payment_method_id": "pix",
-        "payer": {
-            "email": email,
-            "first_name": first_name,
-            "last_name": last_name
-        }
-    }
-
-    payment_response = mercadopago_sdk.payment().create(payment_data)
-    payment_id: int = payment_response['response']['id']
-    now = datetime.datetime.now()
-
-    for item in cart_items:
-        payment: Payment = Payment(
-            mercado_pago_id=payment_id,
-            user_id=user.steam64id,
-            item_id=item.item.id,
-            created_at=now
-        )
-        db.session.add(payment)
-
-    db.session.commit()
-
-
-    base64qrcode = payment_response['response']['point_of_interaction']['transaction_data']['qr_code_base64']
-    qr_code = payment_response['response']['point_of_interaction']['transaction_data']['qr_code']
-    qr_code_min = qr_code[:27]
+    payment_id, qr_code_base64, qr_code = mercadopago_service.create_payment(total_value, email, first_name, last_name, cpf)
+    payment_service.create_payment(user, payment_id)
 
     return render_template('loja/pix.html',
-                           base64qrcode=base64qrcode,
-                           qr_code_min=qr_code_min,
+                           base64qrcode=qr_code_base64,
+                           qr_code_min=qr_code[:35],
                            qr_code=qr_code,
                            user=user
                            )
-
-
-
