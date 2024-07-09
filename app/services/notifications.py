@@ -1,17 +1,12 @@
 from run import logger
 
-logger.debug("Fazendo os imports das bibliotecas do notification service")
-logger.debug("Import #1")
 from app.models import User, db
-logger.debug("Import #2")
 from app.exceptions.userDontExitsException import UserDontExistsException
-logger.debug("Import #3")
 from app.services.user import user_exists
-logger.debug("Import #4")
 from flask.sessions import SessionMixin
-logger.debug("Feito com sucesso!")
 
 
+logger.debug("notification -> add_cart_notification")
 def add_cart_notification(session: SessionMixin, amount: int) -> None:
     if not user_exists(session['steam64id']):
         raise UserDontExistsException("Steam ID not found")
@@ -22,7 +17,7 @@ def add_cart_notification(session: SessionMixin, amount: int) -> None:
     db.session.add(user)
     db.session.commit()
 
-
+logger.debug("notification -> remove_cart_notification")
 def remove_cart_notification(session: SessionMixin, amount: int) -> None:
     if not user_exists(session['steam64id']):
         raise UserDontExistsException("Steam ID not found")
@@ -45,21 +40,25 @@ def empty_cart_notification(session: SessionMixin) -> None:
     db.session.commit()
 
 
-def send_notification(session: SessionMixin, type: str, content: str) -> None:
+logger.debug("notification -> send_notification")
+def send_notification(session: SessionMixin, notification_type: str, content: str) -> None:
     if 'notifications' not in session:
         session['notifications'] = []
 
     session['notifications'] = [
         {
-            'type': f'{type}',
+            'type': f'{notification_type}',
             'content': f'{content}'
         }
     ]
 
 
+logger.debug("notification -> get_temporary_notifications")
 def get_temporary_notifications(session: SessionMixin) -> list[dict]:
     if session.get('notifications') is not None:
         notifications = session['notifications'].copy()
         session['notifications'] = []
         return notifications
     return []
+
+logger.debug("finished")
