@@ -1,5 +1,4 @@
 from run import logger
-
 from app.models import User, db
 from app.exceptions.userDontExitsException import UserDontExistsException
 from app.services.user import user_exists
@@ -55,10 +54,16 @@ def send_notification(session: SessionMixin, notification_type: str, content: st
 
 logger.debug("notification -> get_temporary_notifications")
 def get_temporary_notifications(session: SessionMixin) -> list[dict]:
-    if session.get('notifications') is not None:
-        notifications = session['notifications'].copy()
-        session['notifications'] = []
-        return notifications
-    return []
+    try:
+        if session.get('notifications') is not None:
+            notifications = session['notifications'][:]
+            session['notifications'] = []
+            logger.debug(f"Returning notifications: {notifications}")
+            return notifications
+        logger.debug("No notifications found in session.")
+        return []
+    except Exception as e:
+        logger.exception("An error occurred while getting temporary notifications." + e.__str__())
+        return []
 
 logger.debug("finished")
