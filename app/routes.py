@@ -10,8 +10,6 @@ from app.exceptions.itemDontExistsException import ItemDontExistsException
 from app.exceptions.cartItemDontExistsException import cartItemDontExistsException
 from app.exceptions.emptyCartException import EmptyCartException
 from app.exceptions.invalidCPF import InvalidCPF
-from app.exceptions.invalidFederalUnitException import InvalidFederalUnitException
-from app.exceptions.invalidZipCode import InvalidZipCode
 
 from app.services.discord import send_webhook_discord_message
 from mercadopago import SDK
@@ -164,25 +162,24 @@ def cart_add_item():
     item_id: int = int(request.form.get('item_id'))
     action: str = request.form.get('action')
 
-    status: str = "error"
-    message: str = "Item ou ação desconhecidos!"
-
     try:
         if action == 'add':
             cart_service.add_cart_item(session, item_id)
             notification_service.add_cart_notification(session, 1)
             message: str = "Item adicionado com sucesso!"
             status: str = "success"
-
         elif action == 'remove':
             cart_service.remove_cart_item(session, item_id)
             notification_service.remove_cart_notification(session, 1)
             message: str = "Item removido com sucesso!"
             status: str = "success"
-    except (ItemDontExistsException, cartItemDontExistsException):
-        pass
+        else:
+            return jsonify({"status": "error", 'message': 'Item ou ação desconhecidos'}), 400
 
-    return jsonify({'status': status, 'message': message})
+    except (ItemDontExistsException, cartItemDontExistsException):
+        return jsonify({'status': 'error', 'message': 'Item ou ação desconhecidos'}), 400
+
+    return jsonify({'status': status, 'message': message}), 200
 
 
 @main.route('/shop')
@@ -308,24 +305,16 @@ def pay_checkout():
         last_name = request.form['last_name']
         cpf = request.form['cpf']
         email = request.form['email']
-
-        zipcode = request.form['zip_code']
-        federal_unity = request.form['federal_unit']
-        city = request.form['city']
-        neighborhood = request.form['neighborhood']
-        street_name = request.form['street_name']
-        street_number = request.form['street_number']
     except KeyError:
         notification_service.send_notification(session, NotificationsTypes.ERROR.value,
                           "As informações não foram preenchidas corretamente. Impossível prosseguir.")
         return redirect('/')
 
     cpf = cpf.replace("-", "").replace(".", '')
-    zipcode = zipcode.replace("-", "")
 
     try:
-        utils_service.is_valid_data(cart_items, cpf, federal_unity, zipcode)
-    except (EmptyCartException, InvalidCPF, InvalidFederalUnitException, InvalidZipCode) as e:
+        utils_service.is_valid_data(cart_items, cpf)
+    except (EmptyCartException, InvalidCPF) as e:
         notification_service.send_notification(session, NotificationsTypes.ERROR.value, e.msg)
 
     total_value = 0
