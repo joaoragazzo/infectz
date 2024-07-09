@@ -20,6 +20,7 @@ for handler in logger.handlers:
     handler.flush()
 
 try:
+    logger.debug('Tentando importar o app e o create_app...')
     from app import create_app
     logger.debug('Módulo app importado com sucesso. Tentando criar a aplicação...')
     app = create_app()
