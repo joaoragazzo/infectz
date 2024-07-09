@@ -1,4 +1,3 @@
-from app import create_app
 import logging
 from logging.handlers import RotatingFileHandler
 import sys
