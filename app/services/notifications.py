@@ -54,8 +54,11 @@ def send_notification(session: SessionMixin, notification_type: str, content: st
 
 logger.debug("notification -> get_temporary_notifications")
 def get_temporary_notifications(session: SessionMixin) -> list[dict]:
+    logger.debug("entrou na função get_temporary_notifications")
     try:
+        logger.debug("try:")
         if session.get('notifications') is not None:
+            logger.debug("if session.get('notifications') is not None:")
             notifications = session['notifications'][:]
             session['notifications'] = []
             logger.debug(f"Returning notifications: {notifications}")
