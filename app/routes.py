@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, session, Blueprint, flash, jsonify
 from app.config import Config
-from app.models import db, Item, User, Inventory, Category, Cart
+from app.models import db, Item, User, Inventory, Category, Cart, Payment
 from app.middleware import login_required
 from app.services.cart import add_cart_item, remove_cart_item
 from app.services.notifications import add_cart_notification, remove_cart_notification, empty_cart_notification, send_notification
@@ -362,6 +362,20 @@ def pay_checkout():
     }
 
     payment_response = mercadopago_sdk.payment().create(payment_data)
+    payment_id: int = payment_response['response']['id']
+    now = datetime.datetime.now()
+
+    for item in cart_items:
+        payment: Payment = Payment(
+            mercado_pago_id=payment_id,
+            user_id=user.steam64id,
+            item_id=item.item.id,
+            created_at=now
+        )
+        db.session.add(payment)
+
+    db.session.commit()
+
 
     base64qrcode = payment_response['response']['point_of_interaction']['transaction_data']['qr_code_base64']
     qr_code = payment_response['response']['point_of_interaction']['transaction_data']['qr_code']
