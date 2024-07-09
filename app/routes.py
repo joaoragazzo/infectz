@@ -13,21 +13,10 @@ from app.services.utils import is_valid_cpf
 from mercadopago import SDK
 from collections import defaultdict
 
-logger.debug('Tentando importar notification_service')
 import app.services.notifications as notification_service
-logger.debug('Importação notification_service com sucesso!')
-
-logger.debug('Tentando importar cart_service')
 import app.services.cart as cart_service
-logger.debug('Importação cart_service com sucesso!')
-
-logger.debug('Tentando importar user_service')
 import app.services.user as user_service
-logger.debug('Importação user_service com sucesso!')
-
-logger.debug('Tentando importar inventory_service')
 import app.services.inventory as inventory_service
-logger.debug('Importação inventory_service com sucesso!')
 
 import markupsafe
 import requests
@@ -167,8 +156,6 @@ def cart():
 @main.route('/cart', methods=['POST'])
 @login_required
 def cart_add_item():
-    user: User = user_service.get_user_by_session(session)
-
     item_id: int = int(request.form.get('item_id'))
     action: str = request.form.get('action')
 

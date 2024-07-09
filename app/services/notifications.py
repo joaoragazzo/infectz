@@ -5,7 +5,6 @@ from app.services.user import user_exists
 from flask.sessions import SessionMixin
 
 
-logger.debug("notification -> add_cart_notification")
 def add_cart_notification(session: SessionMixin, amount: int) -> None:
     if not user_exists(session['steam64id']):
         raise UserDontExistsException("Steam ID not found")
@@ -16,7 +15,7 @@ def add_cart_notification(session: SessionMixin, amount: int) -> None:
     db.session.add(user)
     db.session.commit()
 
-logger.debug("notification -> remove_cart_notification")
+
 def remove_cart_notification(session: SessionMixin, amount: int) -> None:
     if not user_exists(session['steam64id']):
         raise UserDontExistsException("Steam ID not found")
@@ -39,7 +38,6 @@ def empty_cart_notification(session: SessionMixin) -> None:
     db.session.commit()
 
 
-logger.debug("notification -> send_notification")
 def send_notification(session: SessionMixin, notification_type: str, content: str) -> None:
     if 'notifications' not in session:
         session['notifications'] = []
@@ -52,21 +50,10 @@ def send_notification(session: SessionMixin, notification_type: str, content: st
     ]
 
 
-logger.debug("notification -> get_temporary_notifications")
 def get_temporary_notifications(session: SessionMixin):
-    logger.debug("entrou na função get_temporary_notifications")
-    try:
-        logger.debug("try:")
-        if session.get('notifications') is not None:
-            logger.debug("if session.get('notifications') is not None:")
-            notifications = session['notifications'][:]
-            session['notifications'] = []
-            logger.debug(f"Returning notifications: {notifications}")
-            return notifications
-        logger.debug("No notifications found in session.")
-        return []
-    except Exception as e:
-        logger.exception("An error occurred while getting temporary notifications." + e.__str__())
-        return []
+    if session.get('notifications') is not None:
+        notifications = session['notifications'][:]
+        session['notifications'] = []
+        return notifications
+    return []
 
-logger.debug("finished")
