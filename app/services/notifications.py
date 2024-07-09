@@ -53,7 +53,7 @@ def send_notification(session: SessionMixin, notification_type: str, content: st
 
 
 logger.debug("notification -> get_temporary_notifications")
-def get_temporary_notifications(session: SessionMixin) -> list[dict]:
+def get_temporary_notifications(session: SessionMixin):
     logger.debug("entrou na função get_temporary_notifications")
     try:
         logger.debug("try:")
