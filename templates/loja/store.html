@@ -27,7 +27,7 @@
     </div>
 </div>
 
-<div class="d-flex margin-top-medium">
+<div class="d-flex margin-top-medium" id="categories-container" data-categories='[{% for category in store %}"{{ category.name | e }}"{% if not loop.last %},{% endif %}{% endfor %}]'>
     {% for category in store %}
         <div id="{{ category.name | e }}" class="container scrollable-container">
             <div class="row justify-content-center">
@@ -62,28 +62,8 @@
     {%  endfor %}
 </div>
 
-<script>
-    $(document).ready(function() {
-        const categories = [{% for category in store %}"{{ category.name | e}}",{% endfor %}]
-        for(let i in categories) {
-            $('#' + categories[i]).hide();
-        }
-        $('#' + categories[0]).show();
-
-        window.changeCategory = function(name) {
-            for(let i in categories) {
-                if (categories[i] === name) {
-                    $('#' + categories[i]).show();
-                } else {
-                    $('#' + categories[i]).hide();
-                }
-            }
-        }
-    });
-</script>
-
 {% include 'includes/footer_scripts.html' %}
 <script src="/static/js/add-to-cart.min.js"></script>
-
+<script src="/static/js/change_categories.min.js"></script>
 </body>
 </html>
