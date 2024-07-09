@@ -8,8 +8,12 @@ from app.middleware import login_required
 from app.enums.notificationsTypes import NotificationsTypes
 from app.exceptions.itemDontExistsException import ItemDontExistsException
 from app.exceptions.cartItemDontExistsException import cartItemDontExistsException
+from app.exceptions.emptyCartException import EmptyCartException
+from app.exceptions.invalidCPF import InvalidCPF
+from app.exceptions.invalidFederalUnitException import InvalidFederalUnitException
+from app.exceptions.invalidZipCode import InvalidZipCode
+
 from app.services.discord import send_webhook_discord_message
-from app.services.utils import is_valid_cpf
 from mercadopago import SDK
 from collections import defaultdict
 
@@ -17,6 +21,7 @@ import app.services.notifications as notification_service
 import app.services.cart as cart_service
 import app.services.user as user_service
 import app.services.inventory as inventory_service
+import app.services.utils as utils_service
 
 import markupsafe
 import requests
@@ -81,14 +86,14 @@ def authorize():
 
             now = datetime.datetime.now()
 
-            if not user_service.user_exists(steam64id):
+            if not user_service.user_exists(int(steam64id)):
                 user = User(
                     steam64id=steam64id,
                     first_login=now,
                     last_login=now
                 )
             else:
-                user: User = user_service.get_user_by_steam64id(steam64id)
+                user: User = user_service.get_user_by_steam64id(int(steam64id))
                 user.last_login = now
 
             db.session.add(user)
@@ -315,31 +320,13 @@ def pay_checkout():
                           "As informações não foram preenchidas corretamente. Impossível prosseguir.")
         return redirect('/')
 
-    federal_units = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR",
-                     "PE",
-                     "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"]
     cpf = cpf.replace("-", "").replace(".", '')
     zipcode = zipcode.replace("-", "")
 
-    if not cart_items:
-        notification_service.send_notification(session, NotificationsTypes.ERROR.value,
-                          "Seu carrinho está vazio. Impossível de prosseguir.")
-        return redirect('/')
-
-    if not is_valid_cpf(cpf):
-        notification_service.send_notification(session, NotificationsTypes.ERROR.value,
-                          "O CPF fornecido é inválido. Impossível prosseguir.")
-        return redirect('/')
-
-    if federal_unity not in federal_units:
-        notification_service.send_notification(session, NotificationsTypes.ERROR.value,
-                          "O estado fornecido é inválido. Impossível prosseguir.")
-        return redirect('/')
-
-    if len(zipcode) != 8 or not zipcode.isdigit():
-        notification_service.send_notification(session, NotificationsTypes.ERROR.value,
-                          "O CEP fornecido é inválido. Impossível prosseguir.")
-        return redirect('/')
+    try:
+        utils_service.is_valid_data(cart_items, cpf, federal_unity, zipcode)
+    except (EmptyCartException, InvalidCPF, InvalidFederalUnitException, InvalidZipCode) as e:
+        notification_service.send_notification(session, NotificationsTypes.ERROR.value, e.msg)
 
     total_value = 0
     for item in cart_items:
@@ -352,19 +339,7 @@ def pay_checkout():
         "payer": {
             "email": email,
             "first_name": first_name,
-            "last_name": last_name,
-            "identification": {
-                "type": "cpf",
-                "number": cpf
-            },
-            "address": {
-                "zip_code": zipcode,
-                "street_name": street_name,
-                "street_number": street_number,
-                "neighborhood": neighborhood,
-                "city": city,
-                "federal_unit": federal_unity
-            }
+            "last_name": last_name
         }
     }
 
