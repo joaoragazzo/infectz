@@ -26,7 +26,6 @@ def remove_cart_item(session: SessionMixin, item_id: int) -> None:
     if cart_item_to_remove is None:
         raise cartItemDontExistsException("This cart item does not exists in our database.")
 
-
     db.session.delete(cart_item_to_remove)
     db.session.commit()
 
