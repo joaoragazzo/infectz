@@ -1,5 +1,6 @@
 from app.models import db, User, Cart, Payment
 import datetime
+from run import logger
 
 
 def create_payment(user: User, mercadopago_id: int):
@@ -28,6 +29,7 @@ def create_payment(user: User, mercadopago_id: int):
 
 
 def approve_payment(mercadopago_id: int):
+    logger.debug("approve_payment.payment.mercado_pago.id:" + str(mercadopago_id))
     """
     Approve all payments in payment table
 

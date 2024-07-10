@@ -33,7 +33,6 @@ def create_payment(total_value: int, email: str, first_name: str, last_name: str
     }
 
     payment_response = mercadopago_sdk.payment().create(payment_data)
-    logger.debug("CRIANDO A SOLICITAÇÃO DE PAGAMENTO:" + str(payment_response))
     return (payment_response['response']['id'],
             payment_response['response']['point_of_interaction']['transaction_data']['qr_code_base64'],
             payment_response['response']['point_of_interaction']['transaction_data']['qr_code'])
@@ -48,6 +47,7 @@ def check_approved_payment(payment_id: int):
     """
 
     payment_response = mercadopago_sdk.payment().search({'id': payment_id})
-    logger.debug(f"CHECANDO STATUS DO ID {payment_id}:" + str(payment_response))
-    logger.debug(f">>> {payment_response['response']['results'][0]['status']}")
-    return payment_response['response']['results'][0]['status'] == 'approved'
+    try:
+        return payment_response['response']['results'][0]['status'] == 'approved'
+    except KeyError:
+        return False

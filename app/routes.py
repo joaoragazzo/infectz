@@ -111,10 +111,12 @@ def logout():
 @main.route('/mercadopago/payment-webhook', methods=['POST'])
 def mercadopago_payment_webhook():
     data = request.get_json()
-    logger.debug("RECEBIMENTO DA CRIAÇÃO ATRAVÉS DO WEBHOOK: " + str(data))
+    logger.debug("Foi chamado!")
     if data['action'] == 'payment.updated':
         mercadopago_id = data['data']['id']
+        logger.debug("Mercadopago_id: " + str(mercadopago_id))
         approved = mercadopago_service.check_approved_payment(mercadopago_id)
+        logger.debug("Foi aprovado? " + str(approved))
         if approved:
             payment_service.approve_payment(mercadopago_id)
             inventory_service.move_from_payment_to_inventory(mercadopago_id)
