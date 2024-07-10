@@ -9,6 +9,7 @@ def create_payment(total_value: int, email: str, first_name: str, last_name: str
     """
     Create a payment request for a purchase on MercadoPago API
 
+    :param cpf_number:
     :param total_value:
     :param email:
     :param first_name:
@@ -23,11 +24,11 @@ def create_payment(total_value: int, email: str, first_name: str, last_name: str
         "payer": {
             "email": email,
             "first_name": first_name,
-            "last_name": last_name
-        },
-        "identification": {
-            "type": "cpf",
-            "number": cpf_number
+            "last_name": last_name,
+            "identification": {
+                "type": "cpf",
+                "number": cpf_number
+            }
         }
     }
 
