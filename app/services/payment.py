@@ -14,14 +14,14 @@ def create_payment(user: User, mercadopago_id: int):
 
     cart_items = Cart.query.filter_by(user_id=user.steam64id).all()
 
-    for item in cart_items:
+    for cart_item in cart_items:
         new_payment = Payment(
             user_id=user.steam64id,
-            mercadopago_id=mercadopago_id,
-            item_id=item.id,
+            mercado_pago_id=mercadopago_id,
+            item_id=cart_item.id,
             created_at=now
         )
         db.session.add(new_payment)
-        db.session.delete(item)
+        db.session.delete(cart_item)
 
     db.session.commit()
