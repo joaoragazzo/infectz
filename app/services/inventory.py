@@ -7,12 +7,12 @@ def get_inventory(session: SessionMixin):
     return Inventory.query.filter_by(user_id=session['steam64id']).all()
 
 
-def move_from_payment_to_inventory(user: User, mercadopago_id: int):
+def move_from_payment_to_inventory(mercadopago_id: int):
     payments = Payment.query.filter_by(mercado_pago_id=mercadopago_id).all()
 
     for payment in payments:
         new_inventory_item = Inventory(
-            user_id=user.steam64id,
+            user_id=payment.user_id,
             item_id=payment.item_id,
             redeemed=False,
             payment_id=payment.id
