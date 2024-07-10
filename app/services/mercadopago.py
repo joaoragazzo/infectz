@@ -49,8 +49,5 @@ def check_approved_payment(payment_id: int):
 
     payment_response = mercadopago_sdk.payment().search({'id': payment_id})
     logger.debug(f"CHECANDO STATUS DO ID {payment_id}:" + str(payment_response))
-    try:
-        return payment_response['response']['results'][0]['status'] == 'approved'
-    except KeyError:
-        return False
-
+    logger.debug(f">>> {payment_response['response']['results'][0]['status']}")
+    return payment_response['response']['results'][0]['status'] == 'approved'
