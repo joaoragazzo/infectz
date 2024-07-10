@@ -40,7 +40,7 @@ CREATE TABLE item (
 
 CREATE TABLE payment (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
-    mercado_pago_id INT(11) NOT NULL,
+    mercadopago_id BIGINT(20) NOT NULL,
     user_id BIGINT(20) UNSIGNED NOT NULL,
     item_id INT(11) NOT NULL,
     created_at DATETIME NOT NULL,

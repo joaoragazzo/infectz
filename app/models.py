@@ -44,7 +44,7 @@ class Item(db.Model):
 
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    mercado_pago_id = db.Column(db.Integer, nullable=False)
+    mercadopago_id = db.Column(db.BigInteger, nullable=False)
     user_id = db.Column(db.BigInteger, db.ForeignKey('user.steam64id'), nullable=False)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
@@ -58,7 +58,7 @@ class Inventory(db.Model):
     user_id = db.Column(db.BigInteger, db.ForeignKey('user.steam64id'), nullable=False)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
     redeemed = db.Column(db.Boolean, default=False)
-    payment_id = db.Column(db.Integer, db.ForeignKey('payment.id'), nullable=False)
+    payment_id = db.Column(db.BigInteger, db.ForeignKey('payment.id'), nullable=False)
 
     user = db.relationship('User', backref='user_inventory', lazy=True)
     item = db.relationship('Item', backref='item_inventory', lazy=True)

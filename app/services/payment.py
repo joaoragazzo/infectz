@@ -17,7 +17,7 @@ def create_payment(user: User, mercadopago_id: int):
     for cart_item in cart_items:
         new_payment = Payment(
             user_id=user.steam64id,
-            mercado_pago_id=mercadopago_id,
+            mercadopago_id=mercadopago_id,
             item_id=cart_item.item.id,
             created_at=now
         )
@@ -35,7 +35,7 @@ def approve_payment(mercadopago_id: int):
     :return:
     """
 
-    purchases = Payment.query.filter_by(mercado_pago_id=mercadopago_id).all()
+    purchases = Payment.query.filter_by(mercadopago_id=mercadopago_id).all()
 
     for purchase in purchases:
         purchase.approved = True

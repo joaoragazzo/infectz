@@ -229,12 +229,12 @@ def add_itens():
     db.session.commit()
 
     mosin_item = Item(category_id=1, name="Mosin", description="Arma ruim",
-                      price=20.0, price_off=0, image_url='/static/img/itens/mosin.jpg')
+                      price=1.0, price_off=0, image_url='/static/img/itens/mosin.jpg')
     db.session.add(mosin_item)
     db.session.commit()
 
     m4a1_item = Item(category_id=1, name="M4A1", description="Arma média",
-                     price=25.0, price_off=0, image_url='/static/img/itens/m4a1.jpg')
+                     price=2.0, price_off=0, image_url='/static/img/itens/m4a1.jpg')
     db.session.add(m4a1_item)
     db.session.commit()
 
@@ -244,7 +244,7 @@ def add_itens():
     db.session.commit()
 
     mi17 = Item(category_id=2, name="MI17", description="Veiculo que o alemao fica brabo",
-                price=15.0, price_off=0, image_url='/static/img/itens/mi17.jpg')
+                price=1.0, price_off=0, image_url='/static/img/itens/mi17.jpg')
     db.session.add(mi17)
     db.session.commit()
 
