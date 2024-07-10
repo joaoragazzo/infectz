@@ -18,7 +18,7 @@ def create_payment(user: User, mercadopago_id: int):
         new_payment = Payment(
             user_id=user.steam64id,
             mercado_pago_id=mercadopago_id,
-            item_id=cart_item.id,
+            item_id=cart_item.item.id,
             created_at=now
         )
         db.session.add(new_payment)
