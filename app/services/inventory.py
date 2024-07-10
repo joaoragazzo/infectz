@@ -8,7 +8,7 @@ def get_inventory(session: SessionMixin):
 
 
 def move_from_payment_to_inventory(mercadopago_id: int):
-    payments = Payment.query.filter_by(mercado_pago_id=mercadopago_id).all()
+    payments = Payment.query.filter_by(mercadopago_id=mercadopago_id).all()
 
     for payment in payments:
         new_inventory_item = Inventory(
