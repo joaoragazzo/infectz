@@ -6,7 +6,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
 file_handler = RotatingFileHandler('error.log', maxBytes=500000, backupCount=3)
-file_handler.setLevel(logging.ERROR)
+file_handler.setLevel(logging.DEBUG)
 file_formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]')
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
