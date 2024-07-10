@@ -4,7 +4,7 @@ import datetime
 
 def create_payment(user: User, mercadopago_id: int):
     """
-    Change every item on Cart to Payment tab
+    Change every item on Cart to Payment table
 
     :param user:
     :param mercadopago_id:
@@ -23,5 +23,22 @@ def create_payment(user: User, mercadopago_id: int):
         )
         db.session.add(new_payment)
         db.session.delete(cart_item)
+
+    db.session.commit()
+
+
+def approve_payment(mercadopago_id: int):
+    """
+    Approve all payments in payment table
+
+    :param mercadopago_id:
+    :return:
+    """
+
+    purchases = Payment.query.filter_by(mercado_pago_id=mercadopago_id).all()
+
+    for purchase in purchases:
+        purchase.approved = True
+        db.session.add(purchase)
 
     db.session.commit()

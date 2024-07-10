@@ -31,8 +31,6 @@ from urllib.parse import urlencode
 
 main = Blueprint('main', __name__)
 
-mercadopago_sdk = SDK(Config.MERCADO_PAGO_SDK_KEY)
-
 @main.route('/login')
 def login():
     params = {
@@ -113,7 +111,15 @@ def logout():
 @main.route('/mercadopago/payment-webhook', methods=['POST'])
 def mercadopago_payment_webhook():
     data = request.get_json()
-    send_webhook_discord_message(str(data))
+
+    if data['action'] == 'payment.updated':
+        mercadopago_id = data['data']['id']
+        approved = mercadopago_service.check_approved_payment(mercadopago_id)
+        if approved:
+            payment_service.approve_payment(mercadopago_id)
+
+
+    #send_webhook_discord_message(str(data))
     return jsonify({"status": "success"}), 200
 
 

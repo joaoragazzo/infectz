@@ -38,3 +38,18 @@ def create_payment(total_value: int, email: str, first_name: str, last_name: str
     return (payment_response['response']['id'],
             payment_response['response']['point_of_interaction']['transaction_data']['qr_code_base64'],
             payment_response['response']['point_of_interaction']['transaction_data']['qr_code'])
+
+
+def check_approved_payment(payment_id: int):
+    """
+    Verify the payment is approved
+
+    :param payment_id:
+    :return: Boolean state of the payment
+    """
+
+
+
+    payment_response = mercadopago_sdk.payment().search({'id': payment_id})
+    return payment_response['results'][0]['status'] == 'approved'
+
