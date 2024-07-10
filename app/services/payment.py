@@ -29,7 +29,6 @@ def create_payment(user: User, mercadopago_id: int):
 
 
 def approve_payment(mercadopago_id: int):
-    logger.debug("approve_payment.payment.mercado_pago.id: " + str(mercadopago_id))
     """
     Approve all payments in payment table
 
@@ -40,8 +39,7 @@ def approve_payment(mercadopago_id: int):
     purchases = Payment.query.filter_by(mercadopago_id=mercadopago_id).all()
 
     for purchase in purchases:
-        logger.debug("foi um, e outro?")
-        purchase.approved = True
+        purchase.payment_confirmed = True
         db.session.add(purchase)
 
     db.session.commit()
