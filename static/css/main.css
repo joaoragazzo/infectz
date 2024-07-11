@@ -147,7 +147,6 @@ a {
 .card {
     background-color: #232323;
     height: max-content;
-    width: 200px;
 }
 
 .card-body p {
