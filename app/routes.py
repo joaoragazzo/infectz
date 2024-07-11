@@ -153,7 +153,7 @@ def cart():
         cart_items_dict[item_name]['id'] = cart_item.item.id
         cart_items_dict[item_name]['name'] = item_name
         cart_items_dict[item_name]['count'] += 1
-        cart_items_dict[item_name]['price'] = cart_item.item.price
+        cart_items_dict[item_name]['price'] = f"{cart_item.item.price:.2f}"
         cart_items_dict[item_name]['image'] = cart_item.item.image_url
 
     cart_items_final: list[dict] = list(cart_items_dict.values())
