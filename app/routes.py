@@ -279,6 +279,8 @@ def pay():
 
     cart_items_final: list[dict] = list(cart_items_dict.values())
 
+    total_price = f"{total_price:.2f}"
+
     return render_template('loja/pay.html',
                            user=user,
                            cart_items=cart_items_final,
