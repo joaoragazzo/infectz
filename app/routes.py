@@ -275,7 +275,7 @@ def pay():
         cart_items_dict[item_name]['name'] = item_name
         cart_items_dict[item_name]['count'] += 1
         cart_items_dict[item_name]['price'] = f"{cart_item.item.price:.2f}"
-        cart_items_dict[item_name]['total_price'] = f"{(int(cart_items_dict[item_name]['total_price']) + cart_item.item.price):.2f}"
+        cart_items_dict[item_name]['total_price'] = f"{(float(cart_items_dict[item_name]['total_price']) + cart_item.item.price):.2f}"
         cart_items_dict[item_name]['image'] = cart_item.item.image_url
 
     cart_items_final: list[dict] = list(cart_items_dict.values())
