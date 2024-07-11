@@ -39,7 +39,7 @@ def approve_payment(mercadopago_id: int):
     purchases = Payment.query.filter_by(mercadopago_id=mercadopago_id).all()
 
     for purchase in purchases:
-        purchase.payment_confirmed = 'approved'
+        purchase.status = 'approved'
         db.session.add(purchase)
 
     db.session.commit()
@@ -55,7 +55,7 @@ def expire_payment(mercadopago_id: int):
     purchases = Payment.query.filter_by(mercadopago_id=mercadopago_id).all()
 
     for purchase in purchases:
-        purchase.payment_confirmed = 'expired'
+        purchase.status = 'expired'
         db.session.add(purchase)
 
     db.session.commit()
