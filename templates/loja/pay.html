@@ -28,7 +28,7 @@
                         <div class="small-text abel">R$ {{ (cart_item["price"] * cart_item["count"]) | e }}</div>
                     </div>
                     <div class="col-2 flex-grow-1 center abel">
-                        {{ cart_item["count"] | e }}x R${{ formated_price[0] | e }},{{ formated_price[1] | e }}
+                        {{ cart_item["count"] | e }}x R$ {{ cart_item["price"] | e }}
                     </div>
                 </div>
                 {% endfor %}
