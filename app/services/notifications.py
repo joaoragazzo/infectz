@@ -27,6 +27,16 @@ def add_inventory_notification(session: SessionMixin, amount: int) -> None:
     db.session.commit()
 
 
+def empty_inventory_notification(session: SessionMixin) -> None:
+    if not user_exists(session['steam64id']):
+        raise UserDontExistsException("Steam ID not found")
+
+    user: User = User.query.filter_by(steam64id=session['steam64id']).first()
+    user.inventory_notifications = 0
+    db.session.add(user)
+    db.session.commit()
+
+
 def add_inventory_notification_by_steam64id(steam64id: int, amount: int) -> None:
     if not user_exists(steam64id):
         raise UserDontExistsException("Steam ID not found")

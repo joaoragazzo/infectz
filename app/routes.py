@@ -214,6 +214,8 @@ def inventory():
     user: User = user_service.get_user_by_session(session)
     inventory: list[Inventory] = inventory_service.get_inventory(session)
 
+    notification_service.empty_inventory_notification(session)
+
     return render_template('logged/inventory.html',
                            user=user,
                            inventory=(inventory if inventory is not None else []),
