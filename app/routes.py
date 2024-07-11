@@ -121,7 +121,7 @@ def mercadopago_payment_webhook():
         if approved:
             payment_service.approve_payment(mercadopago_id)
             inventory_service.move_from_payment_to_inventory(mercadopago_id)
-            notification_service.add_inventory_notification(user.steam64id, payments_number)
+            notification_service.add_inventory_notification_by_steam64id(user.steam64id, payments_number)
         else:
             payment_service.expire_payment(mercadopago_id)
 
