@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% include 'includes/servername.html' %}</title>
+    {% include 'includes/default_links.html' %}
+    <link rel='stylesheet' href="/static/css/sidebar.css">
+</head>
+<body>
+{% include 'includes/header.html' %}
+
+<div class="container full justify-content-center text-center slogan big-text emph margin-top-medium">
+    CONFIGURAÇÕES
+</div>
+
+<div class="container d-flex justify-content-center align-items-end position-relative margin-top-low w-90">
+    <div class="cart fit-content w-100" style="max-width: none;">
+        <div class="flex-shrink-0 p-3" style="width: 280px;">
+            <div class="abel border-bottom medium-text mb-2">
+                Configurações de Usuário
+            </div>
+            <ul class="list-unstyled ps-0">
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed abel" data-bs-toggle="collapse"
+                            data-bs-target="#home-collapse" aria-expanded="true">
+                        Conta pessoal
+                    </button>
+                    <div class="collapse show" id="home-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-dark rounded abel">Ajustes e preferências</a></li>
+                            <li><a href="#" class="link-dark rounded abel">Status da conta</a></li>
+                            <li><a href="#" class="link-dark rounded abel">Segurança e privacidade</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed abel" data-bs-toggle="collapse"
+                            data-bs-target="#dashboard-collapse" aria-expanded="false">
+                        Compras
+                    </button>
+                    <div class="collapse" id="dashboard-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-dark rounded abel">Histórico de compras</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed abel" data-bs-toggle="collapse"
+                            data-bs-target="#orders-collapse" aria-expanded="false">
+                        Suporte
+                    </button>
+                    <div class="collapse" id="orders-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-dark rounded abel">Suporte com compras</a></li>
+                            <li><a href="#" class="link-dark rounded abel">Enviar sugestão</a></li>
+                            <li><a href="#" class="link-dark rounded abel">Denunciar um jogador</a></li>
+                            <li><a href="#" class="link-dark rounded abel">Relatar problema de segurança</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <div class="abel border-bottom medium-text mt-4 mb-2">
+                    Configurações de Administrador
+                </div>
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed abel" data-bs-toggle="collapse"
+                            data-bs-target="#shop-collapse" aria-expanded="false">
+                        Loja
+                    </button>
+                    <div class="collapse" id="shop-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-dark rounded">Categorias</a></li>
+                            <li><a href="#" class="link-dark rounded">Itens</a></li>
+                            <li><a href="#" class="link-dark rounded">Descontos</a></li>
+                            <li><a href="#" class="link-dark rounded">Cupons</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed abel" data-bs-toggle="collapse"
+                            data-bs-target="#players-collapse" aria-expanded="false">
+                        Jogadores
+                    </button>
+                    <div class="collapse" id="players-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-dark rounded">Lista de jogadores</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed abel" data-bs-toggle="collapse"
+                            data-bs-target="#purchases-collapse" aria-expanded="false">
+                        Doações
+                    </button>
+                    <div class="collapse" id="purchases-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-dark rounded">Lista de doações</a></li>
+                            <li><a href="#" class="link-dark rounded">Doações a expirar</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed abel" data-bs-toggle="collapse"
+                            data-bs-target="#clan-collapse" aria-expanded="false">
+                        Clans
+                    </button>
+                    <div class="collapse" id="clan-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-dark rounded">Lista de clans</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed abel" data-bs-toggle="collapse"
+                            data-bs-target="#funds-collapse" aria-expanded="false">
+                        Arrecadação
+                    </button>
+                    <div class="collapse" id="funds-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-dark rounded">Visão geral</a></li>
+                            <li><a href="#" class="link-dark rounded">Últimos 7 dias</a></li>
+                            <li><a href="#" class="link-dark rounded">Últimos 14 dias</a></li>
+                            <li><a href="#" class="link-dark rounded">Último mês</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed abel" data-bs-toggle="collapse"
+                            data-bs-target="#log4z-collapse" aria-expanded="false">
+                        Log4Z
+                    </button>
+                    <div class="collapse" id="log4z-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-dark rounded">Visualizar logs</a></li>
+                            <li><a href="#" class="link-dark rounded">Salvar um log</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed abel" data-bs-toggle="collapse"
+                            data-bs-target="#security-collapse" aria-expanded="false">
+                        Discord Webhook
+                    </button>
+                    <div class="collapse" id="security-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-dark rounded">Doações</a></li>
+                            <li><a href="#" class="link-dark rounded">Login</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+{% include 'includes/footer_scripts.html' %}
+</body>
+</html>

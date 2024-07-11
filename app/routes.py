@@ -215,6 +215,15 @@ def inventory():
                            )
 
 
+@main.route('/account')
+@login_required
+def account():
+    user: User = user_service.get_user_by_session(session)
+
+    return render_template('logged/config.html',
+                           user=user)
+
+
 @main.route('/add-test-database')
 def add_itens():
     guns_category = Category(name="Armas")  # ID: 1
