@@ -1,3 +1,8 @@
+:root {
+    --bs-secondary-rgb: 60, 60, 60;
+    --bs-dark-rgb: 225, 225, 225;
+}
+
 body {
     background-color: #171717;
 }
