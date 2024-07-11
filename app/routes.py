@@ -113,11 +113,12 @@ def mercadopago_payment_webhook():
     data = request.get_json()
     if data['action'] == 'payment.updated':
         mercadopago_id = data['data']['id']
-        logger.debug("Mercadopago_id: " + str(mercadopago_id))
         approved = mercadopago_service.check_approved_payment(mercadopago_id)
         if approved:
             payment_service.approve_payment(mercadopago_id)
             inventory_service.move_from_payment_to_inventory(mercadopago_id)
+        else:
+            payment_service.expire_payment(mercadopago_id)
 
     send_webhook_discord_message(str(data))
     return jsonify({"status": "success"}), 200

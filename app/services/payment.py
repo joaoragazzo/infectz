@@ -39,7 +39,23 @@ def approve_payment(mercadopago_id: int):
     purchases = Payment.query.filter_by(mercadopago_id=mercadopago_id).all()
 
     for purchase in purchases:
-        purchase.payment_confirmed = True
+        purchase.payment_confirmed = 'approved'
+        db.session.add(purchase)
+
+    db.session.commit()
+
+def expire_payment(mercadopago_id: int):
+    """
+    Set all payments in payment table to expire
+
+    :param mercadopago_id:
+    :return:
+    """
+
+    purchases = Payment.query.filter_by(mercadopago_id=mercadopago_id).all()
+
+    for purchase in purchases:
+        purchase.payment_confirmed = 'expired'
         db.session.add(purchase)
 
     db.session.commit()

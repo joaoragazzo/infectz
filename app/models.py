@@ -55,7 +55,7 @@ class Payment(db.Model):
     user_id = db.Column(db.BigInteger, db.ForeignKey('user.steam64id'), nullable=False)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
-    payment_confirmed = db.Column(db.Boolean, default=False)
+    status = db.Column(db.Enum('approved', 'expired', 'pending'), nullable=False, default='pending')
 
     user = db.relationship('User', backref='user_payments', lazy=True)
     item = db.relationship('Item', backref='item_payments', lazy=True)

@@ -44,7 +44,7 @@ CREATE TABLE payment (
     user_id BIGINT(20) UNSIGNED NOT NULL,
     item_id INT(11) NOT NULL,
     created_at DATETIME NOT NULL,
-    payment_confirmed BOOLEAN DEFAULT FALSE,
+    status ENUM('approved', 'pending', 'expired') DEFAULT 'pending' ,
     FOREIGN KEY (user_id) REFERENCES user(steam64id),
     FOREIGN KEY (item_id) REFERENCES item(id)
 );
