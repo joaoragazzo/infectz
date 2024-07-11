@@ -113,10 +113,15 @@ def mercadopago_payment_webhook():
     data = request.get_json()
     if data['action'] == 'payment.updated':
         mercadopago_id = data['data']['id']
+        user = payment_service.check_payment_owner(mercadopago_id)
+        payments_number = payment_service.check_payment_amount(mercadopago_id)
+
         approved = mercadopago_service.check_approved_payment(mercadopago_id)
+
         if approved:
             payment_service.approve_payment(mercadopago_id)
             inventory_service.move_from_payment_to_inventory(mercadopago_id)
+            notification_service.add_inventory_notification(user.steam64id, payments_number)
         else:
             payment_service.expire_payment(mercadopago_id)
 

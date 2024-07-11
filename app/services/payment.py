@@ -59,3 +59,14 @@ def expire_payment(mercadopago_id: int):
         db.session.add(purchase)
 
     db.session.commit()
+
+
+def check_payment_owner(mercadopago_id: int):
+    steam_id: int = Payment.query.filter_by(mercadopago_id=mercadopago_id).first().user_id
+    user: User = User.query.filter_by(steam64id=steam_id).first()
+    return user
+
+
+def check_payment_amount(mercadopago_id: int):
+    payments = Payment.query.filter_by(mercadopago_id=mercadopago_id).all()
+    return len(payments)
