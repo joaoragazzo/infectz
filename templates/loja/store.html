@@ -43,8 +43,8 @@
                                 <p class="card-text abel text-center wiped-out margin-bottom-none">{{ item.description | e }}</p>
                                 <div class="card-text abel text-center price">
                                     <span class="small-padding-top">R$</span>
-                                    <span class="big-text">{{ item.price | e }}</span>
-                                    <span class="small-padding-top">00</span>
+                                    <span class="big-text">{{ item.formated_price[0] | e }}</span>
+                                    <span class="small-padding-top">{{ item.formated_price[1] }}</span>
                                 </div>
                                 <button class="button-primary small-text abel justify-content-center" onclick="addToCart({{ item.id | e }})">
                                     <div class="row">

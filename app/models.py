@@ -42,6 +42,13 @@ class Item(db.Model):
     inventory_items = db.relationship('Inventory', backref='item_inventory', lazy=True)
     cart_items = db.relationship('Cart', backref='item_cart', lazy=True)
 
+    @property
+    def formated_price(self):
+        price_str = f"{self.price:.2f}"
+        integer_part, decimal_part = price_str.split(".")
+        return integer_part, decimal_part
+
+
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     mercadopago_id = db.Column(db.BigInteger, nullable=False)
