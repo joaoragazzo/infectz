@@ -16,7 +16,8 @@ CREATE TABLE `user` (
     first_login DATETIME NOT NULL,
     last_login DATETIME NOT NULL,
     clan_id INT(11),
-    role ENUM('none', 'member', 'sub_leader', 'leader') DEFAULT 'none',
+    clan_role ENUM('none', 'member', 'sub_leader', 'leader') DEFAULT 'none',
+    system_role ENUM('admin', 'user') DEFAULT 'user',
     FOREIGN KEY (clan_id) REFERENCES clan(id)
 );
 

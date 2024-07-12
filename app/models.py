@@ -15,12 +15,17 @@ class User(db.Model):
     first_login = db.Column(db.DateTime, nullable=False)
     last_login = db.Column(db.DateTime, nullable=False)
     clan_id = db.Column(db.Integer, db.ForeignKey('clan.id'), nullable=True)
-    role = db.Column(db.Enum('none', 'member', 'sub_leader', 'leader'), default='none', nullable=False)
+    clan_role = db.Column(db.Enum('none', 'member', 'sub_leader', 'leader'), default='none', nullable=False)
+    system_role = db.Column(db.Enum('admin', 'user'), default='user')
 
     clan = db.relationship('Clan', backref='members', foreign_keys=[clan_id])
     inventory = db.relationship('Inventory', backref='user_inventory', lazy=True)
     cart = db.relationship('Cart', backref='user_cart', lazy=True)
     payments = db.relationship('Payment', backref='user_payments', lazy=True)
+
+    @property
+    def is_admin(self):
+        return self.system_role == 'admin'
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
